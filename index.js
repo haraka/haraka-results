@@ -1,9 +1,9 @@
-// results.js - programmatic handling of plugin results
+// results - programmatic handling of plugin results
 
 'use strict';
 
-var config = require('./config');
-var util = require('util');
+var config = require('haraka-config');
+var util   = require('util');
 
 // see docs in docs/Results.md
 var append_lists = ['msg','pass','fail','skip','err'];
