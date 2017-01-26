@@ -1,5 +1,7 @@
 # haraka-results
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/haraka/haraka-results.svg)](https://greenkeeper.io/)
+
 Add, log, retrieve, and share the results of plugin tests.
 
 ## Synopsis
