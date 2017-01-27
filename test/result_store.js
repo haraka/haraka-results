@@ -1,9 +1,10 @@
 
 var fixtures     = require('haraka-test-fixtures');
+var Results      = require('../index');
 
 function _set_up(done) {
     this.connection = new fixtures.connection.createConnection();
-    this.connection.results = new fixtures.result_store(this.connection);
+    this.connection.results = new Results(this.connection);
     done();
 }
 

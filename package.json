@@ -8,6 +8,7 @@
   },
   "scripts": {
     "lint": "./node_modules/.bin/eslint *.js test/*.js",
+    "cover": "./node_modules/.bin/istanbul cover ./run_tests",
     "test": "./run_tests"
   },
   "repository": {
