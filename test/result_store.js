@@ -146,7 +146,6 @@ exports.private_collate = {
 exports.get = {
     setUp : function (done) {
         this.connection = new fixtures.connection.createConnection();
-        this.connection.results = new fixtures.result_store(this.connection);
         this.connection.results.add('test_plugin', { pass: 'foo' });
         done();
     },
@@ -163,3 +162,61 @@ exports.get = {
         test.done();
     },
 };
+
+exports.collate = {
+    setUp : _set_up,
+    'string' : function (test) {
+        test.expect(1);
+        this.connection.results.add({name: 'pi'}, { pass: 'goob' });
+        var collated = this.connection.results.collate('pi');
+        test.equal('pass:goob', collated);
+        test.done();
+    },
+}
+
+exports.resolve_plugin_name = {
+    setUp : _set_up,
+    'string' : function (test) {
+        test.expect(1);
+        var name = this.connection.results.resolve_plugin_name('test_plugin');
+        test.equal('test_plugin', name);
+        test.done();
+    },
+    'object' : function (test) {
+        test.expect(1);
+        var name = this.connection.results.resolve_plugin_name({ name: 'test_plugin' });
+        test.equal('test_plugin', name);
+        test.done();
+    },
+}
+
+exports.redis_publish = {
+    setUp : function (done) {
+        var server = {
+            notes: {
+                // this is the redis that will publish
+                redis: require('redis').createClient(),
+            }
+        };
+        this.connection = new fixtures.connection.createConnection(null, server);
+        this.connection.results = new Results(this.connection);
+        done();
+    },
+    'redis_publish' : function (test) {
+        var conn = this.connection;
+        test.expect(1);
+
+        // this redis client is subscribed
+        var sub_db = require('redis').createClient();
+        sub_db.on('pmessage', function (pattern, channel, message) {
+            // console.log(arguments);
+            test.equal(JSON.parse(message).result.pass, 'the test');
+            test.done();
+        })
+        .on('psubscribe', function (pattern, count) {
+            // console.log('psubscribed to ' + pattern);
+            conn.results.add({ name: 'pi'}, { pass: 'the test'});
+        })
+        .psubscribe('*');
+    },
+}

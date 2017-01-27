@@ -34,5 +34,8 @@
   },
   "dependencies": {
     "haraka-config": "*"
+  },
+  "optionalDependencies": {
+    "redis": "^2.6.5"
   }
 }
