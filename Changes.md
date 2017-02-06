@@ -3,6 +3,7 @@
 
 - updated with eslint-plugin-haraka
 - added AppVeyor (windows) testing
+- update eslint to inherit eslint-plugin-haraka
 
 
 ## 1.0.1  - 2017-01-26
