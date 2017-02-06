@@ -13,9 +13,9 @@
 - update eslint to inherit eslint-plugin-haraka
 - added AppVeyor (windows) testing
 
-
 ## 1.0.1  - 2017-01-26
 
+- update eslint to inherit eslint-plugin-haraka
 * depend on haraka-config
     * vs ./config, which doesn't work for npm packaged plugin tests
 
