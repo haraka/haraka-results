@@ -1,6 +1,7 @@
 # haraka-results
 
 [![Build Status][ci-img]][ci-url]
+[![Windows Build Status][ci-win-img]][ci-win-url]
 [![Code Coverage][cov-img]][cov-url]
 [![Code Climate][clim-img]][clim-url]
 [![Greenkeeper badge][gk-img]][gk-url]
@@ -227,6 +228,8 @@ It's also wise to unsubscribe. It's easy to do on the `disconnect` hook:
 
 [ci-img]: https://travis-ci.org/haraka/haraka-results.svg
 [ci-url]: https://travis-ci.org/haraka/haraka-results
+[ci-win-img]: https://ci.appveyor.com/api/projects/status/xl1jyo67667htprf?svg=true
+[ci-win-url]: https://ci.appveyor.com/project/msimerson/haraka-results
 [cov-img]: https://codecov.io/github/haraka/haraka-results/coverage.svg
 [cov-url]: https://codecov.io/github/haraka/haraka-results
 [clim-img]: https://codeclimate.com/github/haraka/haraka-results/badges/gpa.svg

@@ -2,6 +2,7 @@
 ## 1.0.2 - 2017-
 
 - updated with eslint-plugin-haraka
+- added AppVeyor (windows) testing
 
 
 ## 1.0.1  - 2017-01-26
