@@ -12,7 +12,7 @@ var log_opts     = ['emit','human','human_html'];
 var all_opts     = append_lists.concat(overwrite_lists, log_opts);
 var cfg;
 
-function ResultStore(conn) {
+function ResultStore (conn) {
     this.conn = conn;
     this.store = {};
     cfg = config.get('results.ini');
