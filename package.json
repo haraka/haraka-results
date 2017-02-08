@@ -9,7 +9,7 @@
   "scripts": {
     "lint": "./node_modules/.bin/eslint *.js test/*.js",
     "cover": "./node_modules/.bin/istanbul cover ./run_tests",
-    "test": "./run_tests"
+    "test": "node run_tests"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,7 @@
     "eslint": "^3.14.1",
     "eslint-plugin-haraka": "^1.0.5",
     "haraka-test-fixtures": "^1.0.15",
+    "redis": "^2.6.5",
     "nodeunit": "*"
   },
   "dependencies": {
