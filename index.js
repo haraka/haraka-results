@@ -111,12 +111,17 @@ ResultStore.prototype.incr = function (plugin, obj) {
         this.store[name] = result;
     }
 
+    var pub = {};
+
     for (var key in obj) {
         var val = parseFloat(obj[key]) || 0;
         if (isNaN(val)) val = 0;
         if (isNaN(result[key])) result[key] = 0;
         result[key] = parseFloat(result[key]) + parseFloat(val);
+        pub[key] = result[key];
     }
+
+    this.redis_publish(name, pub);
 };
 
 ResultStore.prototype.push = function (plugin, obj) {
