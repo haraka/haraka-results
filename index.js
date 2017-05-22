@@ -15,7 +15,9 @@ var cfg;
 function ResultStore (conn) {
     this.conn = conn;
     this.store = {};
-    cfg = config.get('results.ini');
+    cfg = config.get('results.ini', {
+        booleans: [ '-redis_publish' ]
+    });
 }
 
 function default_result () {
@@ -55,6 +57,8 @@ ResultStore.prototype.has = function (plugin, list, search) {
 ResultStore.prototype.redis_publish = function (name, obj) {
     if (!this.conn.server || !this.conn.server.notes) return;
     if (!this.conn.server.notes.redis) return;
+    if (!(cfg.main.redis_publish || 
+          this.conn.server.notes.results_redis_publish)) return;
 
     var channel = 'result-' +
         (this.conn.transaction ?
