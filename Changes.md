@@ -1,4 +1,8 @@
 
+## 2.0.0 - 2017-05-26
+
+- Disable Redis pub/sub by default
+
 ## 1.0.2 - 2017-02-13
 
 - publish incr operations
