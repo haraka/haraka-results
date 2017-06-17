@@ -17,9 +17,9 @@ exports.default_result = {
         delete this.connection.results.store.test_plugin.human;
         delete this.connection.results.store.test_plugin.human_html;
         test.deepEqual(
-                { pass: ['test pass'], fail: [], msg: [], err: [], skip: [] },
-                this.connection.results.get('test_plugin')
-                );
+            { pass: ['test pass'], fail: [], msg: [], err: [], skip: [] },
+            this.connection.results.get('test_plugin')
+        );
         test.done();
     },
     'init add array' : function (test) {
@@ -29,9 +29,9 @@ exports.default_result = {
         delete this.connection.results.store.test_plugin.human;
         delete this.connection.results.store.test_plugin.human_html;
         test.deepEqual(
-                { pass: [1,2,3], fail: [], msg: [], err: [], skip: [] },
-                this.connection.results.get('test_plugin')
-                );
+            { pass: [1,2,3], fail: [], msg: [], err: [], skip: [] },
+            this.connection.results.get('test_plugin')
+        );
         test.done();
     },
     'init incr' : function (test) {
@@ -40,9 +40,9 @@ exports.default_result = {
         delete this.connection.results.store.test_plugin.human;
         delete this.connection.results.store.test_plugin.human_html;
         test.deepEqual(
-                { pass: [], fail: [], msg: [], err: [], skip: [], counter: 1 },
-                this.connection.results.get('test_plugin')
-                );
+            { pass: [], fail: [], msg: [], err: [], skip: [], counter: 1 },
+            this.connection.results.get('test_plugin')
+        );
         test.done();
     },
     'init push' : function (test) {
@@ -51,9 +51,9 @@ exports.default_result = {
         delete this.connection.results.store.test_plugin.human;
         delete this.connection.results.store.test_plugin.human_html;
         test.deepEqual(
-                { pass: ['test1'], fail: [], msg: [], err: [], skip: [] },
-                this.connection.results.get('test_plugin')
-                );
+            { pass: ['test1'], fail: [], msg: [], err: [], skip: [] },
+            this.connection.results.get('test_plugin')
+        );
         test.done();
     },
     'init push array' : function (test) {
@@ -63,9 +63,9 @@ exports.default_result = {
         delete this.connection.results.store.test_plugin.human;
         delete this.connection.results.store.test_plugin.human_html;
         test.deepEqual(
-                { pass: ['test1','test2'], fail: [], msg: [], err: [], skip: [] },
-                this.connection.results.get('test_plugin')
-                );
+            { pass: ['test1','test2'], fail: [], msg: [], err: [], skip: [] },
+            this.connection.results.get('test_plugin')
+        );
         test.done();
     },
     'init push, other' : function (test) {
@@ -214,10 +214,10 @@ exports.redis_publish = {
             test.equal(JSON.parse(message).result.pass, 'the test');
             test.done();
         })
-        .on('psubscribe', function (pattern, count) {
+            .on('psubscribe', function (pattern, count) {
             // console.log('psubscribed to ' + pattern);
-            conn.results.add({ name: 'pi'}, { pass: 'the test'});
-        })
-        .psubscribe('*');
+                conn.results.add({ name: 'pi'}, { pass: 'the test'});
+            })
+            .psubscribe('*');
     },
 }
