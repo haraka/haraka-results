@@ -59,11 +59,11 @@ ResultStore.prototype.redis_publish = function (name, obj) {
 
     var channel = 'result-' +
         (this.conn.transaction ?
-         this.conn.transaction.uuid :
-         this.conn.uuid);
+            this.conn.transaction.uuid :
+            this.conn.uuid);
 
     this.conn.server.notes.redis.publish(channel,
-            JSON.stringify({ plugin: name, result: obj }));
+        JSON.stringify({ plugin: name, result: obj }));
 };
 
 ResultStore.prototype.add = function (plugin, obj) {
