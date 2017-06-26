@@ -196,7 +196,6 @@ exports.redis_publish = {
             notes: {
                 // this is the redis that will publish
                 redis: require('redis').createClient(),
-                results_redis_publish: true,
             }
         };
         this.connection = new fixtures.connection.createConnection(null, server);

@@ -192,12 +192,11 @@ connection.results.add(plugin, { _hidden: 'some data' });
 
 ## Redis Pub/Sub
 
-If a redis client is found on server.notes.redis, and 
-`server.notes.results_redis_publish=true` is set by a plugin  then new 
-results are JSON encoded and published to Redis on the channel named 
-`result-UUID`. Other plugins can subscribe to these publish events by 
-psubscribing (pattern subscribe) to the channel named `result-UUID*`.  
-Replace UUID with the connection UUID.
+If a redis client is found on server.notes.redis, then new results are JSON
+encoded and published to Redis on the channel named `result-UUID`. Other
+plugins can subscribe to these publish events by psubscribing (pattern
+subscribe) to the channel named `result-UUID*`.  Replace UUID with the
+connection UUID.
 
 This is from the karma plugin, subscribing on the `connect_init` hook.
 
