@@ -1,4 +1,8 @@
 
+## 2.0.3 - 2017-08-26
+
+- add redis_publish boolean to disable redis results publishing
+
 ## 2.0.2 - 2017-06-26
 
 - revert #4, until a proper and tested fix is available
