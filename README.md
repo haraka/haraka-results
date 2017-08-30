@@ -16,10 +16,10 @@ session, allowing those results to be retrieved later or by other plugins.
 
 ## Usage
 
-Use this plugin in yours:
+Use results in your plugins like so:
 
-    exports.my_first_hook = function(next, connection) {
-        var plugin = this;
+    exports.my_first_hook = function (next, connection) {
+        let plugin = this;
 
         // run a test
         ......
@@ -193,12 +193,12 @@ connection.results.add(plugin, { _hidden: 'some data' });
 ## Redis Pub/Sub
 
 If a redis client is found on server.notes.redis, then new results are JSON
-encoded and published to Redis on the channel named `result-UUID`. Other
-plugins can subscribe to these publish events by psubscribing (pattern
-subscribe) to the channel named `result-UUID*`.  Replace UUID with the
-connection UUID.
+encoded and published to Redis on the channel named `result-${UUID}`. This
+feature can be disabled by setting `[main]redis_publish=false` in results.ini.
+Plugins can recieve the events by psubscribing (pattern subscribe) to the
+channel named `result-${UUID}*` where ${UUID} is the connection UUID.
 
-This is from the karma plugin, subscribing on the `connect_init` hook.
+This snippet is from the karma plugin, subscribing on the `connect_init` hook.
 
 ```js
 exports.register = function (next, server) {
