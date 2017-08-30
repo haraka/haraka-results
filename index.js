@@ -215,7 +215,7 @@ ResultStore.prototype._log = function (plugin, result, obj) {
     var name = plugin.name;
 
     // logging results
-    if (obj.emit) this.conn.loginfo(plugin, result);  // by request
+    if (obj.emit) this.conn.loginfo(plugin, result);        // by request
     if (obj.err) {
         // Handle error objects by logging the message
         if (util.isError(obj.err)) {
