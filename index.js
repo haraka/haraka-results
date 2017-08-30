@@ -214,16 +214,8 @@ ResultStore.prototype.private_collate = function (result, name) {
 ResultStore.prototype._log = function (plugin, result, obj) {
     var name = plugin.name;
 
-    // collate results
-    result.human = obj.human;
-    if (!result.human) {
-        var r = this.private_collate(result, name);
-        result.human = r.join(', ');
-        result.human_html = r.join(', \t ');
-    }
-
     // logging results
-    if (obj.emit) this.conn.loginfo(plugin, result.human);  // by request
+    if (obj.emit) this.conn.loginfo(plugin, result);  // by request
     if (obj.err) {
         // Handle error objects by logging the message
         if (util.isError(obj.err)) {
@@ -235,8 +227,17 @@ ResultStore.prototype._log = function (plugin, result, obj) {
     }
     if (!obj.emit && !obj.err) {                            // by config
         var pic = cfg[name];
-        if (pic && pic.debug) this.conn.logdebug(plugin, result.human);
+        if (pic && pic.debug) this.conn.logdebug(plugin, result);
     }
+
+    // collate results
+    result.human = obj.human;
+    if (!result.human) {
+        var r = this.private_collate(result, name);
+        result.human = r.join(', ');
+        result.human_html = r.join(', \t ');
+    }
+
     return this.human;
 };
 
