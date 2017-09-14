@@ -1,6 +1,6 @@
 
-var fixtures     = require('haraka-test-fixtures');
-var Results      = require('../index');
+const fixtures     = require('haraka-test-fixtures');
+const Results      = require('../index');
 
 function _set_up (done) {
     this.connection = new fixtures.connection.createConnection();
@@ -151,13 +151,13 @@ exports.get = {
     },
     'has, plugin' : function (test) {
         test.expect(1);
-        var cr = this.connection.results.get({ name: 'test_plugin' });
+        const cr = this.connection.results.get({ name: 'test_plugin' });
         test.equal('foo', cr.pass[0]);
         test.done();
     },
     'has, plugin name' : function (test) {
         test.expect(1);
-        var cr = this.connection.results.get('test_plugin');
+        const cr = this.connection.results.get('test_plugin');
         test.equal('foo', cr.pass[0]);
         test.done();
     },
@@ -168,7 +168,7 @@ exports.collate = {
     'string' : function (test) {
         test.expect(1);
         this.connection.results.add({name: 'pi'}, { pass: 'goob' });
-        var collated = this.connection.results.collate('pi');
+        const collated = this.connection.results.collate('pi');
         test.equal('pass:goob', collated);
         test.done();
     },
@@ -178,13 +178,13 @@ exports.resolve_plugin_name = {
     setUp : _set_up,
     'string' : function (test) {
         test.expect(1);
-        var name = this.connection.results.resolve_plugin_name('test_plugin');
+        const name = this.connection.results.resolve_plugin_name('test_plugin');
         test.equal('test_plugin', name);
         test.done();
     },
     'object' : function (test) {
         test.expect(1);
-        var name = this.connection.results.resolve_plugin_name({ name: 'test_plugin' });
+        const name = this.connection.results.resolve_plugin_name({ name: 'test_plugin' });
         test.equal('test_plugin', name);
         test.done();
     },
@@ -192,7 +192,7 @@ exports.resolve_plugin_name = {
 
 exports.redis_publish = {
     setUp : function (done) {
-        var server = {
+        const server = {
             notes: {
                 // this is the redis that will publish
                 redis: require('redis').createClient(),
@@ -203,11 +203,11 @@ exports.redis_publish = {
         done();
     },
     'redis_publish' : function (test) {
-        var conn = this.connection;
+        const conn = this.connection;
         test.expect(1);
 
         // this redis client is subscribed
-        var sub_db = require('redis').createClient();
+        const sub_db = require('redis').createClient();
         sub_db.on('pmessage', function (pattern, channel, message) {
             // console.log(arguments);
             test.equal(JSON.parse(message).result.pass, 'the test');
