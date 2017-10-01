@@ -214,7 +214,7 @@ exports.redis_publish = {
             test.done();
         })
             .on('psubscribe', function (pattern, count) {
-            // console.log('psubscribed to ' + pattern);
+            // console.log(`psubscribed to ${pattern}`);
                 conn.results.add({ name: 'pi'}, { pass: 'the test'});
             })
             .psubscribe('*');
