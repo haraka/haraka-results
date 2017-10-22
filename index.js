@@ -61,10 +61,7 @@ ResultStore.prototype.redis_publish = function (name, obj) {
     if (!this.conn.server || !this.conn.server.notes) return;
     if (!this.conn.server.notes.redis) return;
 
-    const channel = 'result-' +
-        (this.conn.transaction ?
-            this.conn.transaction.uuid :
-            this.conn.uuid);
+    const channel = `result-${this.conn.transaction ? this.conn.transaction.uuid : this.conn.uuid}`;
 
     this.conn.server.notes.redis.publish(channel,
         JSON.stringify({ plugin: name, result: obj }));
@@ -197,7 +194,7 @@ ResultStore.prototype.private_collate = function (result, name) {
                 continue;
             }
         }
-        r.push(key + ': ' + result[key]);
+        r.push(`${key}: ${result[key]}`);
     }
 
     // and then supporting information
@@ -210,7 +207,7 @@ ResultStore.prototype.private_collate = function (result, name) {
         if (!result[key]) continue;
         if (!result[key].length) continue;
         if (hide && hide.length && hide.indexOf(key) !== -1) continue;
-        r.push( key + ':' + result[key].join(', '));
+        r.push( `${key}: ${result[key].join(', ')}`);
     }
 
     return r;
