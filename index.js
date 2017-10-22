@@ -207,7 +207,7 @@ ResultStore.prototype.private_collate = function (result, name) {
         if (!result[key]) continue;
         if (!result[key].length) continue;
         if (hide && hide.length && hide.indexOf(key) !== -1) continue;
-        r.push( `${key}: ${result[key].join(', ')}`);
+        r.push( `${key}:${result[key].join(', ')}`);
     }
 
     return r;
