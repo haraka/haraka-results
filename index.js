@@ -2,15 +2,15 @@
 
 'use strict';
 
-var config = require('haraka-config');
-var util   = require('util');
+const config = require('haraka-config');
+const util   = require('util');
 
 // see docs in docs/Results.md
-var append_lists = ['msg','pass','fail','skip','err'];
-var overwrite_lists = ['hide','order'];
-var log_opts     = ['emit','human','human_html'];
-var all_opts     = append_lists.concat(overwrite_lists, log_opts);
-var cfg;
+const append_lists = ['msg','pass','fail','skip','err'];
+const overwrite_lists = ['hide','order'];
+const log_opts     = ['emit','human','human_html'];
+const all_opts     = append_lists.concat(overwrite_lists, log_opts);
+let cfg;
 
 function ResultStore (conn) {
     this.conn = conn;
@@ -27,8 +27,8 @@ function default_result () {
 }
 
 ResultStore.prototype.has = function (plugin, list, search) {
-    var name = this.resolve_plugin_name(plugin);
-    var result = this.store[name];
+    const name = this.resolve_plugin_name(plugin);
+    const result = this.store[name];
     if (!result) return false;
     if (!result[list]) return false;
     if (typeof result[list] === 'string') {
@@ -39,8 +39,8 @@ ResultStore.prototype.has = function (plugin, list, search) {
         return false;
     }
     if (Array.isArray(result[list])) {
-        for (var i=0; i<result[list].length; i++) {
-            var item = result[list][i];
+        for (let i=0; i<result[list].length; i++) {
+            const item = result[list][i];
             switch (typeof search) {
                 case 'string':
                 case 'number':
@@ -61,18 +61,15 @@ ResultStore.prototype.redis_publish = function (name, obj) {
     if (!this.conn.server || !this.conn.server.notes) return;
     if (!this.conn.server.notes.redis) return;
 
-    var channel = 'result-' +
-        (this.conn.transaction ?
-            this.conn.transaction.uuid :
-            this.conn.uuid);
+    const channel = `result-${this.conn.transaction ? this.conn.transaction.uuid : this.conn.uuid}`;
 
     this.conn.server.notes.redis.publish(channel,
         JSON.stringify({ plugin: name, result: obj }));
 };
 
 ResultStore.prototype.add = function (plugin, obj) {
-    var name = this.resolve_plugin_name(plugin);
-    var result = this.store[name];
+    const name = this.resolve_plugin_name(plugin);
+    let result = this.store[name];
     if (!result) {
         result = default_result();
         this.store[name] = result;
@@ -81,8 +78,8 @@ ResultStore.prototype.add = function (plugin, obj) {
     this.redis_publish(name, obj);
 
     // these are arrays each invocation appends to
-    for (var i=0; i < append_lists.length; i++) {
-        var key = append_lists[i];
+    for (let i=0; i < append_lists.length; i++) {
+        const key = append_lists[i];
         if (!obj[key]) continue;
         if (Array.isArray(obj[key])) {
             result[key] = result[key].concat(obj[key]);
@@ -93,14 +90,14 @@ ResultStore.prototype.add = function (plugin, obj) {
     }
 
     // these arrays are overwritten when passed
-    for (var j=0; j < overwrite_lists.length; j++) {
-        key = overwrite_lists[j];
+    for (let j=0; j < overwrite_lists.length; j++) {
+        const key = overwrite_lists[j];
         if (!obj[key]) continue;
         result[key] = obj[key];
     }
 
     // anything else is an arbitrary key/val to store
-    for (key in obj) {
+    for (const key in obj) {
         if (all_opts.indexOf(key) !== -1) continue; // weed out our keys
         result[key] = obj[key];            // save the rest
     }
@@ -109,17 +106,17 @@ ResultStore.prototype.add = function (plugin, obj) {
 };
 
 ResultStore.prototype.incr = function (plugin, obj) {
-    var name = this.resolve_plugin_name(plugin);
-    var result = this.store[name];
+    const name = this.resolve_plugin_name(plugin);
+    let result = this.store[name];
     if (!result) {
         result = default_result();
         this.store[name] = result;
     }
 
-    var pub = {};
+    const pub = {};
 
-    for (var key in obj) {
-        var val = parseFloat(obj[key]) || 0;
+    for (const key in obj) {
+        let val = parseFloat(obj[key]) || 0;
         if (isNaN(val)) val = 0;
         if (isNaN(result[key])) result[key] = 0;
         result[key] = parseFloat(result[key]) + parseFloat(val);
@@ -130,8 +127,8 @@ ResultStore.prototype.incr = function (plugin, obj) {
 };
 
 ResultStore.prototype.push = function (plugin, obj) {
-    var name = this.resolve_plugin_name(plugin);
-    var result = this.store[name];
+    const name = this.resolve_plugin_name(plugin);
+    let result = this.store[name];
     if (!result) {
         result = default_result();
         this.store[name] = result;
@@ -139,7 +136,7 @@ ResultStore.prototype.push = function (plugin, obj) {
 
     this.redis_publish(name, obj);
 
-    for (var key in obj) {
+    for (const key in obj) {
         if (!result[key]) result[key] = [];
         if (Array.isArray(obj[key])) {
             result[key] = result[key].concat(obj[key]);
@@ -153,14 +150,14 @@ ResultStore.prototype.push = function (plugin, obj) {
 };
 
 ResultStore.prototype.collate = function (plugin) {
-    var name = this.resolve_plugin_name(plugin);
-    var result = this.store[name];
+    const name = this.resolve_plugin_name(plugin);
+    const result = this.store[name];
     if (!result) return;
     return this.private_collate(result, name).join(', ');
 };
 
 ResultStore.prototype.get = function (plugin_or_name) {
-    var name = this.resolve_plugin_name(plugin_or_name);
+    const name = this.resolve_plugin_name(plugin_or_name);
     return this.store[name];
 };
 
@@ -175,9 +172,9 @@ ResultStore.prototype.get_all = function () {
 };
 
 ResultStore.prototype.private_collate = function (result, name) {
-    var r = [];
-    var order = [];
-    var hide = [];
+    const r = [];
+    let order = [];
+    let hide = [];
 
     if (cfg[name]) {
         if (cfg[name].hide)  hide  = cfg[name].hide.trim().split(/[,; ]+/);
@@ -185,7 +182,7 @@ ResultStore.prototype.private_collate = function (result, name) {
     }
 
     // anything not predefined in the result was purposeful, show it first
-    for (var key in result) {
+    for (const key in result) {
         if (key[0] === '_') continue;  // ignore 'private' keys
         if (all_opts.indexOf(key) !== -1) continue;  // these get shown later.
         if (hide.length && hide.indexOf(key) !== -1) continue;
@@ -197,32 +194,32 @@ ResultStore.prototype.private_collate = function (result, name) {
                 continue;
             }
         }
-        r.push(key + ': ' + result[key]);
+        r.push(`${key}: ${result[key]}`);
     }
 
     // and then supporting information
-    var array = append_lists;                   // default
+    let array = append_lists;                   // default
     if (order && order.length) array = order;   // config file
     if (result.order && result.order.length) array = result.order; // caller
 
-    for (var i=0; i < array.length; i++) {
-        key = array[i];
+    for (let i=0; i < array.length; i++) {
+        const key = array[i];
         if (!result[key]) continue;
         if (!result[key].length) continue;
         if (hide && hide.length && hide.indexOf(key) !== -1) continue;
-        r.push( key + ':' + result[key].join(', '));
+        r.push(`${key}:${result[key].join(', ')}`);
     }
 
     return r;
 };
 
 ResultStore.prototype._log = function (plugin, result, obj) {
-    var name = plugin.name;
+    const name = plugin.name;
 
     // collate results
     result.human = obj.human;
     if (!result.human) {
-        var r = this.private_collate(result, name);
+        const r = this.private_collate(result, name);
         result.human = r.join(', ');
         result.human_html = r.join(', \t ');
     }
@@ -239,8 +236,8 @@ ResultStore.prototype._log = function (plugin, result, obj) {
         }
     }
     if (!obj.emit && !obj.err) {                            // by config
-        var pic = cfg[name];
-        if (pic && pic.debug) this.conn.logdebug(plugin, result);
+        const pic = cfg[name];
+        if (pic && pic.debug) this.conn.logdebug(plugin, result.human);
     }
     return this.human;
 };
