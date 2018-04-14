@@ -14,6 +14,9 @@ Add, log, retrieve, and share the results of plugin tests.
 Results is a structured way of storing results from plugins across a
 session, allowing those results to be retrieved later or by other plugins.
 
+Results objects are present on every Haraka connection *and* transaction. When
+in a SMTP transaction, results from *both* are applicable to that transaction.
+
 ## Usage
 
 Use results in your plugins like so:
@@ -81,12 +84,12 @@ need to specify {emit: true} with the request.
 Examples:
 
 ```js
-    var c = connection
-    c.results.add(plugin, {pass: 'null_sender'})
-    c.results.add(plugin, {fail: 'single_recipient'})
-    c.results.add(plugin, {skip: 'valid_bounce'}
-    c.results.add(plugin, {err: 'timed out looking in couch cushions'})
-    c.results.add(plugin, {msg: 'I found a nickel!', emit: true})
+    const results = connection.results
+    results.add(plugin, {pass: 'null_sender'})
+    results.add(plugin, {fail: 'single_recipient'})
+    results.add(plugin, {skip: 'valid_bounce'}
+    results.add(plugin, {err: 'timed out looking in couch cushions'})
+    results.add(plugin, {msg: 'I found a nickel!', emit: true})
 ```
 
 In addition to appending values to the predefined lists, arbitrary results
@@ -106,10 +109,10 @@ Increment counters. The argument to incr is an object with counter names and
 increment values. Examples:
 
 ```js
-    connection.results.incr(plugin, {unrecognized_commands: 1})
+    results.incr(plugin, {unrecognized_commands: 1})
 
-    connection.results.incr(plugin, {karma: -1})
-    connection.results.incr(plugin, {karma:  2})
+    results.incr(plugin, {karma: -1})
+    results.incr(plugin, {karma:  2})
 ```
 
 
@@ -119,14 +122,14 @@ Append items onto arrays. The argument to push is an object with array names and
 the new value to be appended to the array. Examples:
 
 ```js
-    connection.results.push(plugin, {dns_recs: 'name1'})
-    connection.results.push(plugin, {dns_recs: 'name2'})
+    results.push(plugin, {dns_recs: 'name1'})
+    results.push(plugin, {dns_recs: 'name2'})
 ```
 
 #### collate
 
 ```js
-    const summary = connection.results.collate(plugin)
+    const summary = results.collate(plugin)
 ```
 
 Formats the contents of the result cache and returns them. This function is
@@ -139,7 +142,7 @@ Retrieve the stored results as an object. The only argument is the name of the
 plugin whose results are desired.
 
 ```js
-    const geoip = connection.results.get('geoip')
+    const geoip = results.get('geoip')
     if (geoip && geoip.distance && geoip.distance > 2000) {
         ....
     }
@@ -171,14 +174,14 @@ Syntax:
 Store Results:
 
 ```js
-    connection.results.add(plugin, {pass: 'some_test'})
-    connection.results.add(plugin, {pass: 'some_test(with reason)'})
+    results.add(plugin, {pass: 'some_test'})
+    results.add(plugin, {pass: 'some_test(with reason)'})
 ```
 
 Retrieve exact match with **get**:
 
 ```js
-    if (connection.results.get('plugin_name').pass.indexOf('some_test') !== -1) {
+    if (results.get('plugin_name').pass.indexOf('some_test') !== -1) {
         // some_test passed (1x)
     }
 ```
@@ -186,7 +189,7 @@ Retrieve exact match with **get**:
 Same thing with **has** (retrieve a string match):
 
 ```js
-    if (connection.results.has('plugin_name', 'pass', 'some_test')) {
+    if (results.has('plugin_name', 'pass', 'some_test')) {
         // some_test passed (1x)
     }
 ```
@@ -199,7 +202,7 @@ and all we really want to know is if some\_test passed or not.
 To retrieve a matching pattern:
 
 ```js
-    if (connection.results.has('plugin_name', 'pass', /^some_test/)) {
+    if (results.has('plugin_name', 'pass', /^some_test/)) {
         // some_test passed (2x)
     }
 ```
@@ -212,7 +215,7 @@ human_html output, prefix the name of the key with an underscore.
 Example:
 
 ```js
-    connection.results.add(plugin, { _hidden: 'some data' })
+    results.add(plugin, { _hidden: 'some data' })
 ```
 
 ## Redis Pub/Sub
