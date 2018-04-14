@@ -168,17 +168,19 @@ Syntax:
 ```
 
 * result\_name: the name of an array or string in the result object
-
 * search\_term: a string or RegExp object
 
-Store Results:
+
+### More Examples
+
+#### Store Results:
 
 ```js
     results.add(plugin, {pass: 'some_test'})
     results.add(plugin, {pass: 'some_test(with reason)'})
 ```
 
-Retrieve exact match with **get**:
+#### Retrieve exact match with **get**:
 
 ```js
     if (results.get('plugin_name').pass.indexOf('some_test') !== -1) {
@@ -186,7 +188,7 @@ Retrieve exact match with **get**:
     }
 ```
 
-Same thing with **has** (retrieve a string match):
+#### Retrieve a string match with **has**
 
 ```js
     if (results.has('plugin_name', 'pass', 'some_test')) {
@@ -199,7 +201,7 @@ The syntax for using **has** is a little more pleasant.
 Both options require one to check for each reason which is unpleasant when
 and all we really want to know is if some\_test passed or not.
 
-To retrieve a matching pattern:
+#### Retrieve a matching pattern:
 
 ```js
     if (results.has('plugin_name', 'pass', /^some_test/)) {
@@ -226,32 +228,31 @@ feature can be disabled by setting `[main]redis_publish=false` in results.ini.
 Plugins can recieve the events by psubscribing (pattern subscribe) to the
 channel named `result-${UUID}*` where ${UUID} is the connection UUID.
 
-This snippet is from the karma plugin, subscribing on the `connect_init` hook.
+This is from the karma plugin subscribing on the `connect_init` hook:
 
 ```js
 exports.register = function (next, server) {
     this.inherits('redis')
+
+    register_hook('connect_init', 'redis_subscribe');
+    register_hook('disconnect',   'redis_unsubscribe');
 }
 
-exports.hook_connect_init = function (next, connection) {
-    var plugin = this
+exports.redis_subscribe = function (next, connection) {
+    const plugin = this
+
     plugin.redis_subscribe(connection, function () {
-        connection.notes.redis.on('pmessage', function (pattern, channel, message) {
-            // do fun stuff with messages that look like this
+        connection.notes.redis.on('pmessage', (pattern, channel, message) => {
+            // do stuff with messages that look like this
             // {"plugin":"karma","result":{"fail":"spamassassin.hits"}}
             // {"plugin":"geoip","result":{"country":"CN"}}
         })
         next()
     })
 }
-```
-
-You should also unsubscribe on the `disconnect` hook:
-
-```js
-    exports.hook_disconnect = function (next, connection) {
-        this.redis_unsubscribe(connection)
-    }
+exports.redis_unsubscribe = function (next, connection) {
+    this.redis_unsubscribe(connection)
+}
 ```
 
 
