@@ -1,4 +1,8 @@
 
+## 2.0.4 - 2018-__-__
+
+- use es6 classes
+
 ## 2.0.3 - 2017-08-26
 
 - add redis_publish boolean to disable redis results publishing
@@ -9,7 +13,7 @@
 
 ## 2.0.1 - 2017-05-26
 
-- eslint 4 compat 
+- eslint 4 compat
 
 ## 2.0.0 - 2017-05-26
 
