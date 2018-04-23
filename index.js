@@ -94,6 +94,7 @@ class ResultStore {
 
         // anything else is an arbitrary key/val to store
         for (const key in obj) {
+            if (key.match(/^human(_html)?$/)) continue;
             if (all_opts.indexOf(key) !== -1) continue; // weed out our keys
             result[key] = obj[key];            // save the rest
         }
@@ -133,6 +134,7 @@ class ResultStore {
         this.redis_publish(name, obj);
 
         for (const key in obj) {
+            if (key.match(/^human(_html)?$/)) continue;
             if (!result[key]) result[key] = [];
             if (Array.isArray(obj[key])) {
                 result[key] = result[key].concat(obj[key]);
@@ -221,7 +223,7 @@ class ResultStore {
         }
 
         // logging results
-        if (obj.emit) this.conn.loginfo(plugin, result.human);  // by request
+        if (obj.emit  && result.human.trim().length > 0) this.conn.loginfo(plugin, result.human);  // by request
         if (obj.err) {
             // Handle error objects by logging the message
             if (util.isError(obj.err)) {
