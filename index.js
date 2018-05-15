@@ -226,12 +226,9 @@ class ResultStore {
         if (obj.emit  && result.human.trim().length > 0) this.conn.loginfo(plugin, result.human);  // by request
         if (obj.err) {
             // Handle error objects by logging the message
-            if (util.isError(obj.err)) {
-                this.conn.logerror(plugin, obj.err.message);
-            }
-            else {
-                this.conn.logerror(plugin, obj.err);
-            }
+            const level = obj.emit_log_level ? obj.emit_log_level : 'error';
+            const logobj = util.isError(obj.err) ? obj.err.message : obj.err;
+            this.conn[`log${level}`](plugin, logobj);
         }
         if (!obj.emit && !obj.err) {                            // by config
             const pic = cfg[name];
