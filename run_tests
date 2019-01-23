@@ -1,18 +1,13 @@
 #!/usr/bin/env node
 
-"use strict";
-
+let reporter;
 try {
-    var reporter = require('nodeunit').reporters.default;
+    reporter = require('nodeunit').reporters.default;
 }
-catch(e) {
-    console.log("Error: " + e.message);
-    console.log("");
-    console.log("Cannot find nodeunit module.");
-    console.log("Please run the following:");
-    console.log("");
-    console.log("    npm install");
-    console.log("");
+catch (e) {
+    console.log(`Error: ${e.message}\n`);
+    console.log(`Cannot find nodeunit module.\nPlease run the following:\n`);
+    console.log(`    npm install\n`);
     process.exit();
 }
 
@@ -25,9 +20,7 @@ if (process.argv[2]) {
     });
 }
 else {
-    reporter.run([
-        'test',
-    ], undefined, function (err) {
+    reporter.run(['test'], undefined, function (err) {
         process.exit(((err) ? 1 : 0));
     });
 }

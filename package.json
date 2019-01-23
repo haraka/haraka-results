@@ -32,13 +32,13 @@
     "eslint": "*",
     "eslint-plugin-haraka": "*",
     "haraka-test-fixtures": "*",
-    "redis": "^2.6.5",
+    "redis": "*",
     "nodeunit": "*"
   },
   "dependencies": {
     "haraka-config": "*"
   },
   "optionalDependencies": {
-    "redis": "^2.6.5"
+    "redis": "^2.8.0"
   }
 }

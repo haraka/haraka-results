@@ -35,8 +35,7 @@ class ResultStore {
             return false;
         }
         if (Array.isArray(result[list])) {
-            for (let i=0; i<result[list].length; i++) {
-                const item = result[list][i];
+            for (const item of result[list]) {
                 switch (typeof search) {
                     case 'string':
                     case 'number':
@@ -59,8 +58,7 @@ class ResultStore {
 
         const channel = `result-${this.conn.transaction ? this.conn.transaction.uuid : this.conn.uuid}`;
 
-        this.conn.server.notes.redis.publish(channel,
-            JSON.stringify({ plugin: name, result: obj }));
+        this.conn.server.notes.redis.publish(channel, JSON.stringify({ plugin: name, result: obj }));
     }
 
     add (plugin, obj) {
@@ -74,8 +72,7 @@ class ResultStore {
         this.redis_publish(name, obj);
 
         // these are arrays each invocation appends to
-        for (let i=0; i < append_lists.length; i++) {
-            const key = append_lists[i];
+        for (const key of append_lists) {
             if (!obj[key]) continue;
             if (Array.isArray(obj[key])) {
                 result[key] = result[key].concat(obj[key]);
@@ -86,8 +83,7 @@ class ResultStore {
         }
 
         // these arrays are overwritten when passed
-        for (let j=0; j < overwrite_lists.length; j++) {
-            const key = overwrite_lists[j];
+        for (const key of overwrite_lists) {
             if (!obj[key]) continue;
             result[key] = obj[key];
         }
@@ -153,8 +149,7 @@ class ResultStore {
     }
 
     get (plugin_or_name) {
-        const name = this.resolve_plugin_name(plugin_or_name);
-        return this.store[name];
+        return this.store[ this.resolve_plugin_name(plugin_or_name) ];
     }
 
     resolve_plugin_name (thing) {
