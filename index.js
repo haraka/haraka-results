@@ -85,7 +85,7 @@ class ResultStore {
         // these are arrays each invocation appends to
         for (const key of append_lists) {
             if (!obj[key]) continue;
-            this._append_to_array(result[key], obj[key]);
+            result[key] = this._append_to_array(result[key], obj[key])
         }
 
         // these arrays are overwritten when passed
@@ -105,11 +105,11 @@ class ResultStore {
 
     _append_to_array (array, item) {
         if (Array.isArray(item)) {
-            array = array.concat(item);
+            return array.concat(item);
         }
-        else {
-            array.push(item);
-        }
+
+        array.push(item);
+        return array;
     }
 
     incr (plugin, obj) {
@@ -145,7 +145,7 @@ class ResultStore {
 
         for (const key in obj) {
             if (!result[key]) result[key] = [];
-            this._append_to_array(result[key], obj[key]);
+            result[key] = this._append_to_array(result[key], obj[key])
         }
 
         return this._log(plugin, result, obj);
