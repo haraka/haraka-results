@@ -25,27 +25,38 @@ class ResultStore {
     has (plugin, list, search) {
         const name = this.resolve_plugin_name(plugin);
         const result = this.store[name];
-        if (!result) return false;
-        if (!result[list]) return false;
+        if (!result || !result[list]) return false;
+
         if (typeof result[list] === 'string') {
-            if (typeof search === 'string' && search === result[list]) return true;
-            if (typeof search === 'object' && result[list].match(search)) {
-                return true;
-            }
-            return false;
+            return this._has_string(list, result, search);
         }
+
         if (Array.isArray(result[list])) {
-            for (const item of result[list]) {
-                switch (typeof search) {
-                    case 'string':
-                    case 'number':
-                    case 'boolean':
-                        if (search === item) return true;
-                        break;
-                    case 'object':
-                        if (item.match(search)) return true;
-                        break;
-                }
+            return this._has_array(list, result, search);
+        }
+
+        return false;
+    }
+
+    _has_string (list, result, search) {
+        if (typeof search === 'string' && search === result[list]) return true;
+        if (typeof search === 'object' && result[list].match(search)) {
+            return true;
+        }
+        return false;
+    }
+
+    _has_array (list, result, search) {
+        for (const item of result[list]) {
+            switch (typeof search) {
+                case 'string':
+                case 'number':
+                case 'boolean':
+                    if (search === item) return true;
+                    break;
+                case 'object':
+                    if (item.match(search)) return true;
+                    break;
             }
         }
         return false;
@@ -74,12 +85,7 @@ class ResultStore {
         // these are arrays each invocation appends to
         for (const key of append_lists) {
             if (!obj[key]) continue;
-            if (Array.isArray(obj[key])) {
-                result[key] = result[key].concat(obj[key]);
-            }
-            else {
-                result[key].push(obj[key]);
-            }
+            this._append_to_array(result[key], obj[key]);
         }
 
         // these arrays are overwritten when passed
@@ -95,6 +101,15 @@ class ResultStore {
         }
 
         return this._log(plugin, result, obj);
+    }
+
+    _append_to_array (array, item) {
+        if (Array.isArray(item)) {
+            array = array.concat(item);
+        }
+        else {
+            array.push(item);
+        }
     }
 
     incr (plugin, obj) {
@@ -130,12 +145,7 @@ class ResultStore {
 
         for (const key in obj) {
             if (!result[key]) result[key] = [];
-            if (Array.isArray(obj[key])) {
-                result[key] = result[key].concat(obj[key]);
-            }
-            else {
-                result[key].push(obj[key]);
-            }
+            this._append_to_array(result[key], obj[key]);
         }
 
         return this._log(plugin, result, obj);
