@@ -28,26 +28,24 @@ class ResultStore {
         if (!result || !result[list]) return false;
 
         if (typeof result[list] === 'string') {
-            return this._has_string(list, result, search);
+            return this._has_string(result[list], search);
         }
 
         if (Array.isArray(result[list])) {
-            return this._has_array(list, result, search);
+            return this._has_array(result[list], search);
         }
 
         return false;
     }
 
-    _has_string (list, result, search) {
-        if (typeof search === 'string' && search === result[list]) return true;
-        if (typeof search === 'object' && result[list].match(search)) {
-            return true;
-        }
+    _has_string (msg, search) {
+        if (typeof search === 'string' && search === msg) return true;
+        if (typeof search === 'object' && msg.match(search)) return true;
         return false;
     }
 
-    _has_array (list, result, search) {
-        for (const item of result[list]) {
+    _has_array (msg, search) {
+        for (const item of msg) {
             switch (typeof search) {
                 case 'string':
                 case 'number':
@@ -104,9 +102,7 @@ class ResultStore {
     }
 
     _append_to_array (array, item) {
-        if (Array.isArray(item)) {
-            return array.concat(item);
-        }
+        if (Array.isArray(item)) return array.concat(item);
 
         array.push(item);
         return array;
