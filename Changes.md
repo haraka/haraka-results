@@ -2,6 +2,7 @@
 ## 2.0.4 - 2018-__-__
 
 - use es6 classes
+- es6: use "for item of array" syntax for array iterator
 
 ## 2.0.3 - 2017-08-26
 
