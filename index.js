@@ -164,27 +164,13 @@ class ResultStore {
 
     private_collate (result, name) {
         const r = [];
-        let order = [];
-        let hide = [];
 
-        if (cfg[name]) {
-            if (cfg[name].hide)  hide  = cfg[name].hide.trim().split(/[,; ]+/);
-            if (cfg[name].order) order = cfg[name].order.trim().split(/[,; ]+/);
-        }
+        const order = this._get_order(cfg[name]);
+        const hide = this._get_hide(cfg[name]);
 
         // anything not predefined in the result was purposeful, show it first
         for (const key in result) {
-            if (key[0] === '_') continue;  // ignore 'private' keys
-            if (all_opts.indexOf(key) !== -1) continue;  // these get shown later.
-            if (hide.length && hide.indexOf(key) !== -1) continue;
-            if (typeof result[key] === 'object') {
-                if (Array.isArray(result[key])) {
-                    if (result[key].length === 0) continue;
-                }
-                else {
-                    continue;
-                }
-            }
+            if (!this._pre_defined(key, result, hide)) continue;
             r.push(`${key}: ${result[key]}`);
         }
 
@@ -193,8 +179,7 @@ class ResultStore {
         if (order && order.length) array = order;   // config file
         if (result.order && result.order.length) array = result.order; // caller
 
-        for (let i=0; i < array.length; i++) {
-            const key = array[i];
+        for (const key of array) {
             if (!result[key]) continue;
             if (!result[key].length) continue;
             if (hide && hide.length && hide.indexOf(key) !== -1) continue;
@@ -202,6 +187,31 @@ class ResultStore {
         }
 
         return r;
+    }
+
+    _pre_defined (key, result, hide) {
+        if (key[0] === '_') return false;  // 'private' keys
+        if (all_opts.indexOf(key) !== -1) return false;  // these get shown later.
+        if (hide.length && hide.indexOf(key) !== -1) return false;
+        if (typeof result[key] === 'object') {
+            if (Array.isArray(result[key])) {
+                if (result[key].length === 0) return false;
+            }
+            else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    _get_order (c) {
+        if (!c || !c.order) return [];
+        return c.order.trim().split(/[,; ]+/);
+    }
+
+    _get_hide (c) {
+        if (!c || !c.hide) return [];
+        return c.hide.trim().trim().split(/[,; ]+/);
     }
 
     _log (plugin, result, obj) {
