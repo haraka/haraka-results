@@ -1,9 +1,19 @@
 engines:
   eslint:
     enabled: true
-    channel: "eslint-4"
+    channel: "eslint-6"
     config:
-      config: ".eslintrc.json"
+      config: ".eslintrc.yaml"
+
+checks:
+  return-statements:
+    enabled: false
+  method-lines:
+    config:
+      threshold: 100
+  method-complexity:
+    config:
+      threshold: 20
 
 ratings:
    paths:
