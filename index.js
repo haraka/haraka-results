@@ -176,7 +176,7 @@ class ResultStore {
 
         // anything not predefined in the result was purposeful, show it first
         for (const key in result) {
-            if (!this._pre_defined(key, result, hide)) continue;
+            if (!this._pre_defined(key, result[key], hide)) continue;
             r.push(`${key}: ${result[key]}`);
         }
 
@@ -195,13 +195,13 @@ class ResultStore {
         return r;
     }
 
-    _pre_defined (key, result, hide) {
+    _pre_defined (key, res, hide) {
         if (key[0] === '_') return false;  // 'private' keys
         if (all_opts.indexOf(key) !== -1) return false;  // these get shown later.
         if (hide.length && hide.indexOf(key) !== -1) return false;
-        if (typeof result[key] === 'object') {
-            if (Array.isArray(result[key])) {
-                if (result[key].length === 0) return false;
+        if (typeof res === 'object') {
+            if (Array.isArray(res)) {
+                if (res.length === 0) return false;
             }
             else {
                 return false;
