@@ -7,9 +7,9 @@
     "test": "test"
   },
   "scripts": {
-    "lint": "./node_modules/.bin/eslint *.js test/*.js",
-    "lintfix": "./node_modules/.bin/eslint --fix *.js test/*.js",
-    "cover": "./node_modules/.bin/istanbul cover ./run_tests",
+    "lint": "npx eslint *.js test/*.js",
+    "lintfix": "npx eslint --fix *.js test/*.js",
+    "cover": "npx istanbul cover ./run_tests",
     "test": "node run_tests"
   },
   "repository": {
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/haraka/haraka-results#readme",
   "devDependencies": {
-    "eslint": "*",
+    "eslint": ">=7",
     "eslint-plugin-haraka": "*",
     "haraka-test-fixtures": "*",
     "redis": "*",
