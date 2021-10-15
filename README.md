@@ -1,10 +1,8 @@
 # haraka-results
 
 [![Build Status][ci-img]][ci-url]
-[![Windows Build Status][ci-win-img]][ci-win-url]
 [![Code Coverage][cov-img]][cov-url]
 [![Code Climate][clim-img]][clim-url]
-[![Greenkeeper badge][gk-img]][gk-url]
 [![NPM][npm-img]][npm-url]
 
 Add, log, retrieve, and share the results of plugin tests.
@@ -256,15 +254,11 @@ exports.redis_unsubscribe = function (next, connection) {
 ```
 
 
-[ci-img]: https://travis-ci.org/haraka/haraka-results.svg
-[ci-url]: https://travis-ci.org/haraka/haraka-results
-[ci-win-img]: https://ci.appveyor.com/api/projects/status/xl1jyo67667htprf?svg=true
-[ci-win-url]: https://ci.appveyor.com/project/msimerson/haraka-results
+[ci-img]: https://github.com/haraka/haraka-results/actions/workflows/ci-test.yml/badge.svg
+[ci-url]: https://github.com/haraka/haraka-results/actions/workflows/ci-test.yml
 [cov-img]: https://codecov.io/github/haraka/haraka-results/coverage.svg
 [cov-url]: https://codecov.io/github/haraka/haraka-results
 [clim-img]: https://codeclimate.com/github/haraka/haraka-results/badges/gpa.svg
 [clim-url]: https://codeclimate.com/github/haraka/haraka-results
-[gk-img]: https://badges.greenkeeper.io/haraka/haraka-results.svg
-[gk-url]: https://greenkeeper.io/
 [npm-img]: https://nodei.co/npm/haraka-results.png
 [npm-url]: https://www.npmjs.com/package/haraka-results
