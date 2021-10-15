@@ -1,6 +1,9 @@
 
-## 2.0.4 - 2018-__-__
+## 2.1.0 - 2021-10-14
 
+- bump redis dep 2.8.0 -> 3.1.2 
+- replace nodeunit with mocha
+- add github workflows, drop travis & appveyor CI
 - use es6 classes
 - es6: use "for item of array" syntax for array iterator
 
