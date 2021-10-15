@@ -1,8 +1,5 @@
 language: node_js
 node_js:
-    - "8"
-    - "10"
-    - "11"
     - "12"
 
 services:
@@ -17,6 +14,6 @@ script:
 after_success:
     - npm install istanbul codecov
     - npm run cover
-    - ./node_modules/.bin/codecov
+    - npx codecov
 
 sudo: false

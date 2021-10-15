@@ -1,16 +1,16 @@
 {
   "name": "haraka-results",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "description": "Haraka results store for connections and transactions",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "lint": "./node_modules/.bin/eslint *.js test/*.js",
-    "lintfix": "./node_modules/.bin/eslint --fix *.js test/*.js",
-    "cover": "./node_modules/.bin/istanbul cover ./run_tests",
-    "test": "node run_tests"
+    "lint": "npx eslint *.js test/*.js",
+    "lintfix": "npx eslint --fix *.js test/*.js",
+    "cover": "npx istanbul cover ./run_tests",
+    "test": "npx mocha"
   },
   "repository": {
     "type": "git",
@@ -29,16 +29,16 @@
   },
   "homepage": "https://github.com/haraka/haraka-results#readme",
   "devDependencies": {
-    "eslint": "*",
+    "eslint": ">=7",
     "eslint-plugin-haraka": "*",
     "haraka-test-fixtures": "*",
     "redis": "*",
-    "nodeunit": "*"
+    "mocha": "*"
   },
   "dependencies": {
     "haraka-config": "*"
   },
   "optionalDependencies": {
-    "redis": "^2.8.0"
+    "redis": "^3.1.2"
   }
 }

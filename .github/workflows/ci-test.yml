@@ -1,0 +1,39 @@
+name: CI Tests
+
+on: [ push ]
+
+jobs:
+
+  ci-test:
+    runs-on: ${{ matrix.os }}
+
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        node-version: [ 12, 14, 16 ]
+      fail-fast: false
+
+    env:
+      CI: true
+
+    steps:
+    - uses: actions/checkout@v2
+      name: git checkout
+      with:
+        fetch-depth: 1
+
+    - uses: actions/setup-node@v2
+      name: Use Node.js ${{ matrix.node-version }}
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: npm install
+      run: npm install && npm list --depth=0
+
+    - run: npm run test

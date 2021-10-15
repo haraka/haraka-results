@@ -1,197 +1,172 @@
 
-const fixtures     = require('haraka-test-fixtures');
-const Results      = require('../index');
+const assert    = require('assert')
 
-function _set_up (done) {
-    this.connection = new fixtures.connection.createConnection();
-    this.connection.results = new Results(this.connection);
-    done();
-}
+const redis     = require('redis')
 
-exports.default_result = {
-    setUp : _set_up,
-    // tearDown : _tear_down,
-    'init add' : function (test) {
-        test.expect(1);
+const fixtures  = require('haraka-test-fixtures');
+const Results   = require('../index');
+
+beforeEach(async function () {
+    this.connection = new fixtures.connection.createConnection()
+    this.connection.results = new Results(this.connection)
+})
+
+describe('default_result', function () {
+
+    it('init add', async function () {
         this.connection.results.add('test_plugin', { pass: 'test pass' });
         delete this.connection.results.store.test_plugin.human;
         delete this.connection.results.store.test_plugin.human_html;
-        test.deepEqual(
+        assert.deepEqual(
             { pass: ['test pass'], fail: [], msg: [], err: [], skip: [] },
             this.connection.results.get('test_plugin')
-        );
-        test.done();
-    },
-    'init add array' : function (test) {
-        test.expect(1);
+        )
+    })
+
+    it('init add array', async function () {
         this.connection.results.add('test_plugin', { pass: 1 });
         this.connection.results.add('test_plugin', { pass: [2,3] });
         delete this.connection.results.store.test_plugin.human;
         delete this.connection.results.store.test_plugin.human_html;
-        test.deepEqual(
+        assert.deepEqual(
             { pass: [1,2,3], fail: [], msg: [], err: [], skip: [] },
             this.connection.results.get('test_plugin')
         );
-        test.done();
-    },
-    'init incr' : function (test) {
-        test.expect(1);
+    })
+
+    it('init incr', async function () {
         this.connection.results.incr('test_plugin', { counter: 1 });
         delete this.connection.results.store.test_plugin.human;
         delete this.connection.results.store.test_plugin.human_html;
-        test.deepEqual(
+        assert.deepEqual(
             { pass: [], fail: [], msg: [], err: [], skip: [], counter: 1 },
             this.connection.results.get('test_plugin')
         );
-        test.done();
-    },
-    'init push' : function (test) {
-        test.expect(1);
+    })
+
+    it('init push', async function () {
         this.connection.results.push('test_plugin', { pass: 'test1' });
         delete this.connection.results.store.test_plugin.human;
         delete this.connection.results.store.test_plugin.human_html;
-        test.deepEqual(
+        assert.deepEqual(
             { pass: ['test1'], fail: [], msg: [], err: [], skip: [] },
             this.connection.results.get('test_plugin')
         );
-        test.done();
-    },
-    'init push array' : function (test) {
-        test.expect(1);
+    })
+
+    it('init push array', async function () {
         this.connection.results.push('test_plugin', { pass: 'test1' });
         this.connection.results.push('test_plugin', { pass: ['test2'] });
         delete this.connection.results.store.test_plugin.human;
         delete this.connection.results.store.test_plugin.human_html;
-        test.deepEqual(
+        assert.deepEqual(
             { pass: ['test1','test2'], fail: [], msg: [], err: [], skip: [] },
             this.connection.results.get('test_plugin')
         );
-        test.done();
-    },
-    'init push, other' : function (test) {
-        test.expect(1);
+    })
+
+    it('init push, other', async function () {
         this.connection.results.push('test_plugin', { other: 'test2' });
         delete this.connection.results.store.test_plugin.human;
         delete this.connection.results.store.test_plugin.human_html;
-        test.deepEqual({
+        assert.deepEqual({
             pass: [], other: ['test2'], fail: [], msg: [],
             err: [], skip: []
         },
         this.connection.results.get('test_plugin')
         );
-        test.done();
-    },
-};
+    })
 
-exports.has = {
-    setUp : _set_up,
-    'has, list, string' : function (test) {
-        test.expect(2);
+})
+
+describe('has', () => {
+    it('has, list, string', async function () {
         this.connection.results.add('test_plugin', { pass: 'test pass' });
-        test.equal(true, this.connection.results.has('test_plugin', 'pass', 'test pass'));
-        test.equal(false, this.connection.results.has('test_plugin', 'pass', 'test miss'));
-        test.done();
-    },
-    'has, list, number' : function (test) {
-        test.expect(2);
+        assert.equal(true, this.connection.results.has('test_plugin', 'pass', 'test pass'));
+        assert.equal(false, this.connection.results.has('test_plugin', 'pass', 'test miss'));
+    })
+
+    it('has, list, number', async function () {
         this.connection.results.add('test_plugin', { msg: 1 });
-        test.equal(true, this.connection.results.has('test_plugin', 'msg', 1));
-        test.equal(false, this.connection.results.has('test_plugin', 'msg', 2));
-        test.done();
-    },
-    'has, list, boolean' : function (test) {
-        test.expect(2);
-        this.connection.results.add('test_plugin', { msg: true });
-        test.equal(true, this.connection.results.has('test_plugin', 'msg', true));
-        test.equal(false, this.connection.results.has('test_plugin', 'msg', false));
-        test.done();
-    },
-    'has, list, regexp' : function (test) {
-        test.expect(3);
-        this.connection.results.add('test_plugin', { pass: 'test pass' });
-        test.ok(this.connection.results.has('test_plugin', 'pass', /test/));
-        test.ok(this.connection.results.has('test_plugin', 'pass', / pass/));
-        test.equal(this.connection.results.has('test_plugin', 'pass', /not/), false);
-        test.done();
-    },
-    'has, string, string' : function (test) {
-        test.expect(2);
-        this.connection.results.add('test_plugin', { random_key: 'string value' });
-        test.ok(this.connection.results.has('test_plugin', 'random_key', 'string value'));
-        test.equal(false, this.connection.results.has('test_plugin', 'random_key', 'strings'));
-        test.done();
-    },
-    'has, string, regex' : function (test) {
-        test.expect(3);
-        this.connection.results.add('test_plugin', { random_key: 'string value' });
-        test.ok(this.connection.results.has( 'test_plugin', 'random_key', /string/));
-        test.ok(this.connection.results.has( 'test_plugin', 'random_key', /value/));
-        test.equal(false, this.connection.results.has('test_plugin', 'random_key', /miss/));
-        test.done();
-    },
-};
+        assert.equal(true, this.connection.results.has('test_plugin', 'msg', 1));
+        assert.equal(false, this.connection.results.has('test_plugin', 'msg', 2));
+    })
 
-exports.private_collate = {
-    setUp : _set_up,
-    'collate, arrays are shown in output' : function (test) {
-        test.expect(2);
+    it('has, list, boolean', async function () {
+        this.connection.results.add('test_plugin', { msg: true });
+        assert.equal(true, this.connection.results.has('test_plugin', 'msg', true));
+        assert.equal(false, this.connection.results.has('test_plugin', 'msg', false));
+    })
+
+    it('has, list, regexp', async function () {
+        this.connection.results.add('test_plugin', { pass: 'test pass' });
+        assert.ok(this.connection.results.has('test_plugin', 'pass', /test/));
+        assert.ok(this.connection.results.has('test_plugin', 'pass', / pass/));
+        assert.equal(this.connection.results.has('test_plugin', 'pass', /not/), false);
+    })
+    it('has, string, string', async function () {
+        this.connection.results.add('test_plugin', { random_key: 'string value' });
+        assert.ok(this.connection.results.has('test_plugin', 'random_key', 'string value'));
+        assert.equal(false, this.connection.results.has('test_plugin', 'random_key', 'strings'));
+    })
+    it('has, string, regex', async function () {
+        this.connection.results.add('test_plugin', { random_key: 'string value' });
+        assert.ok(this.connection.results.has( 'test_plugin', 'random_key', /string/));
+        assert.ok(this.connection.results.has( 'test_plugin', 'random_key', /value/));
+        assert.equal(false, this.connection.results.has('test_plugin', 'random_key', /miss/));
+    })
+})
+
+describe('private_collate', () => {
+    it('collate, arrays are shown in output', async function () {
         this.connection.results.push('test_plugin', { foo: 'bar' });
         // console.log(this.connection.results);
-        test.equal(true, this.connection.results.has('test_plugin', 'foo', /bar/));
-        test.ok(/bar/.test(this.connection.results.get('test_plugin').human));
-        test.done();
-    },
-};
+        assert.equal(true, this.connection.results.has('test_plugin', 'foo', /bar/));
+        assert.ok(/bar/.test(this.connection.results.get('test_plugin').human));
+    })
+})
 
-exports.get = {
-    setUp : function (done) {
-        this.connection = new fixtures.connection.createConnection();
-        this.connection.results.add('test_plugin', { pass: 'foo' });
-        done();
-    },
-    'has, plugin' : function (test) {
-        test.expect(1);
+describe('get', () => {
+    beforeEach(async function () {
+        this.connection = new fixtures.connection.createConnection()
+        this.connection.results.add('test_plugin', { pass: 'foo' })
+    })
+
+    it('has, plugin', async function () {
         const cr = this.connection.results.get({ name: 'test_plugin' });
-        test.equal('foo', cr.pass[0]);
-        test.done();
-    },
-    'has, plugin name' : function (test) {
-        test.expect(1);
-        const cr = this.connection.results.get('test_plugin');
-        test.equal('foo', cr.pass[0]);
-        test.done();
-    },
-};
+        assert.equal('foo', cr.pass[0]);
+    })
 
-exports.collate = {
-    setUp : _set_up,
-    'string' : function (test) {
-        test.expect(1);
+    it('has, plugin name', async function () {
+        const cr = this.connection.results.get('test_plugin');
+        assert.equal('foo', cr.pass[0]);
+    })
+})
+
+describe('collate', () => {
+    it('string', async function () {
         this.connection.results.add({name: 'pi'}, { pass: 'goob' });
         const collated = this.connection.results.collate('pi');
-        test.equal('pass:goob', collated);
-        test.done();
-    },
-}
+        assert.equal('pass:goob', collated);
+    })
+})
 
-exports.resolve_plugin_name = {
-    setUp : _set_up,
-    'string' : function (test) {
-        test.expect(1);
+describe('resolve_plugin_name', () => {
+
+    it('string', async function () {
         const name = this.connection.results.resolve_plugin_name('test_plugin');
-        test.equal('test_plugin', name);
-        test.done();
-    },
-    'object' : function (test) {
-        test.expect(1);
-        const name = this.connection.results.resolve_plugin_name({ name: 'test_plugin' });
-        test.equal('test_plugin', name);
-        test.done();
-    },
-}
+        assert.equal('test_plugin', name);
+    })
 
-exports.redis_publish = {
-    setUp : function (done) {
+    it('object', async function () {
+        const name = this.connection.results.resolve_plugin_name({ name: 'test_plugin' });
+        assert.equal('test_plugin', name);
+    })
+})
+
+describe('redis_publish', () => {
+
+    beforeEach(async function () {
         const server = {
             notes: {
                 // this is the redis that will publish
@@ -200,23 +175,24 @@ exports.redis_publish = {
         };
         this.connection = new fixtures.connection.createConnection(null, server);
         this.connection.results = new Results(this.connection);
-        done();
-    },
-    'redis_publish' : function (test) {
+    })
+
+    it('redis_publish', function (done) {
         const conn = this.connection;
-        test.expect(1);
 
         // this redis client is subscribed
-        const sub_db = require('redis').createClient();
+        const sub_db = redis.createClient();
         sub_db.on('pmessage', function (pattern, channel, message) {
             // console.log(arguments);
-            test.equal(JSON.parse(message).result.pass, 'the test');
-            test.done();
+            assert.equal(JSON.parse(message).result.pass, 'the test');
+            conn.server.notes.redis.quit()
+            sub_db.quit()
+            done()
         })
             .on('psubscribe', function (pattern, count) {
             // console.log(`psubscribed to ${pattern}`);
                 conn.results.add({ name: 'pi'}, { pass: 'the test'});
             })
             .psubscribe('*');
-    },
-}
+    })
+})
