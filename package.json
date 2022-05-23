@@ -35,7 +35,6 @@
     "eslint": ">=8",
     "eslint-plugin-haraka": "*",
     "haraka-test-fixtures": "*",
-    "redis": "*",
     "mocha": "*"
   },
   "dependencies": {

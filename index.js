@@ -66,7 +66,6 @@ class ResultStore {
         if (!this.conn.server.notes.redis) return;
 
         const channel = `result-${this.conn.transaction ? this.conn.transaction.uuid : this.conn.uuid}`;
-
         this.conn.server.notes.redis.publish(channel, JSON.stringify({ plugin: name, result: obj }));
     }
 
