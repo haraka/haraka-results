@@ -4,6 +4,7 @@
 - dep(node): require 14+
 - dep(redis): bump 3 -> 4
 - dep(eslint): bump 7 -> 8
+- test: update redis test syntax for v4
 - doc(README): deprecate usage of 'plugin'
 - doc(README): update badges
 
