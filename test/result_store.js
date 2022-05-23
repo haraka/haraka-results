@@ -173,26 +173,24 @@ describe('redis_publish', () => {
                 redis: require('redis').createClient(),
             }
         };
+        await server.notes.redis.connect()
         this.connection = new fixtures.connection.createConnection(null, server);
         this.connection.results = new Results(this.connection);
     })
 
-    it('redis_publish', function (done) {
+    it('redis_publish', async function () {
         const conn = this.connection;
 
-        // this redis client is subscribed
-        const sub_db = redis.createClient();
-        sub_db.on('pmessage', function (pattern, channel, message) {
-            // console.log(arguments);
+        const sub_db = redis.createClient()
+
+        await sub_db.connect()
+
+        await sub_db.pSubscribe('*', (message, channel) => {
             assert.equal(JSON.parse(message).result.pass, 'the test');
             conn.server.notes.redis.quit()
             sub_db.quit()
-            done()
         })
-            .on('psubscribe', function (pattern, count) {
-            // console.log(`psubscribed to ${pattern}`);
-                conn.results.add({ name: 'pi'}, { pass: 'the test'});
-            })
-            .psubscribe('*');
+
+        conn.results.add({ name: 'pi'}, { pass: 'the test'})
     })
 })

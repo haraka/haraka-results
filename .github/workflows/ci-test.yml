@@ -2,6 +2,9 @@ name: CI Tests
 
 on: [ push ]
 
+env:
+  CI: true
+
 jobs:
 
   ci-test:
@@ -16,11 +19,8 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest ]
-        node-version: [ 12, 14, 16 ]
+        node-version: [ 14, 16, 18 ]
       fail-fast: false
-
-    env:
-      CI: true
 
     steps:
     - uses: actions/checkout@v2
@@ -28,7 +28,7 @@ jobs:
       with:
         fetch-depth: 1
 
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v3
       name: Use Node.js ${{ matrix.node-version }}
       with:
         node-version: ${{ matrix.node-version }}
