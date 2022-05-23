@@ -21,26 +21,25 @@ Use results in your plugins like so:
 
 ```js
 exports.my_first_hook = function (next, connection) {
-    let plugin = this
 
     // run a test
     ......
 
     // store the results
-    connection.results.add(plugin, {pass: 'my great test' })
+    connection.results.add(this, {pass: 'my great test' })
 
     // run another test
     .....
 
     // store the results
-    connection.results.add(plugin, {fail: 'gotcha!', msg: 'show this'})
+    connection.results.add(this, {fail: 'gotcha!', msg: 'show this'})
 }
 ```
 
 Store the results in the transaction (vs connection):
 
 ```js
-   connection.transaction.results.add(plugin, {...});`
+   connection.transaction.results.add(this, {...});`
 ```
 
 ### Config options
@@ -83,18 +82,18 @@ Examples:
 
 ```js
     const results = connection.results
-    results.add(plugin, {pass: 'null_sender'})
-    results.add(plugin, {fail: 'single_recipient'})
-    results.add(plugin, {skip: 'valid_bounce'}
-    results.add(plugin, {err: 'timed out looking in couch cushions'})
-    results.add(plugin, {msg: 'I found a nickel!', emit: true})
+    results.add(this, {pass: 'null_sender'})
+    results.add(this, {fail: 'single_recipient'})
+    results.add(this, {skip: 'valid_bounce'}
+    results.add(this, {err: 'timed out looking in couch cushions'})
+    results.add(this, {msg: 'I found a nickel!', emit: true})
 ```
 
 In addition to appending values to the predefined lists, arbitrary results
 can be stored in the cache:
 
 ```js
-    results.add(plugin, {my_result: 'anything I want'})
+    results.add(this, {my_result: 'anything I want'})
 ```
 
 When arbirary values are stored, they are listed first in the log output. Their
@@ -107,10 +106,10 @@ Increment counters. The argument to incr is an object with counter names and
 increment values. Examples:
 
 ```js
-    results.incr(plugin, {unrecognized_commands: 1})
+    results.incr(this, {unrecognized_commands: 1})
 
-    results.incr(plugin, {karma: -1})
-    results.incr(plugin, {karma:  2})
+    results.incr(this, {karma: -1})
+    results.incr(this, {karma:  2})
 ```
 
 
@@ -120,14 +119,14 @@ Append items onto arrays. The argument to push is an object with array names and
 the new value to be appended to the array. Examples:
 
 ```js
-    results.push(plugin, {dns_recs: 'name1'})
-    results.push(plugin, {dns_recs: 'name2'})
+    results.push(this, {dns_recs: 'name1'})
+    results.push(this, {dns_recs: 'name2'})
 ```
 
 #### collate
 
 ```js
-    const summary = results.collate(plugin)
+    const summary = results.collate(this)
 ```
 
 Formats the contents of the result cache and returns them. This function is
@@ -174,8 +173,8 @@ Syntax:
 #### Store Results:
 
 ```js
-    results.add(plugin, {pass: 'some_test'})
-    results.add(plugin, {pass: 'some_test(with reason)'})
+    results.add(this, {pass: 'some_test'})
+    results.add(this, {pass: 'some_test(with reason)'})
 ```
 
 #### Retrieve exact match with **get**:
@@ -215,7 +214,7 @@ human_html output, prefix the name of the key with an underscore.
 Example:
 
 ```js
-    results.add(plugin, { _hidden: 'some data' })
+    results.add(this, { _hidden: 'some data' })
 ```
 
 ## Redis Pub/Sub
@@ -237,9 +236,8 @@ exports.register = function (next, server) {
 }
 
 exports.redis_subscribe = function (next, connection) {
-    const plugin = this
 
-    plugin.redis_subscribe(connection, function () {
+    this.redis_subscribe(connection, function () {
         connection.notes.redis.on('pmessage', (pattern, channel, message) => {
             // do stuff with messages that look like this
             // {"plugin":"karma","result":{"fail":"spamassassin.hits"}}
