@@ -1,8 +1,11 @@
 
 ## 2.2.0 - 2022-05-23
 
-- dep: redis 3 -> 4
-- README: update badges
+- dep(node): require 14+
+- dep(redis): bump 3 -> 4
+- dep(eslint): bump 7 -> 8
+- doc(README): deprecate usage of 'plugin'
+- doc(README): update badges
 
 
 ## 2.1.0 - 2021-10-14

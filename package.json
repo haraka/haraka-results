@@ -6,6 +6,9 @@
   "directories": {
     "test": "test"
   },
+  "engines": {
+    "node": ">=14"
+  },
   "scripts": {
     "cover": "npx istanbul cover npm run test",
     "lint": "npx eslint *.js test/*.js",
