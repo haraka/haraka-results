@@ -62,8 +62,7 @@ class ResultStore {
 
     redis_publish (name, obj) {
         if (!cfg.main.redis_publish) return;
-        if (!this.conn.server || !this.conn.server.notes) return;
-        if (!this.conn.server.notes.redis) return;
+        if (!this.conn.server?.notes?.redis) return;
 
         const channel = `result-${this.conn.transaction ? this.conn.transaction.uuid : this.conn.uuid}`;
         this.conn.server.notes.redis.publish(channel, JSON.stringify({ plugin: name, result: obj }));
