@@ -9,4 +9,3 @@ Checklist:
 - [ ] tests updated
 - [ ] Changes.md updated
 - [ ] package.json.version bumped
-- [x] published to NPM (automatic, upon merge to master)

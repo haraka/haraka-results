@@ -1,4 +1,9 @@
 
+## 2.2.1 - 2022-05-27
+
+- chore(ci): depend on shared GHA workflows
+
+
 ## 2.2.0 - 2022-05-23
 
 - dep(node): require 14+
