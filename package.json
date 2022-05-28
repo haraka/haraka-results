@@ -1,6 +1,6 @@
 {
   "name": "haraka-results",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Haraka results store for connections and transactions",
   "main": "index.js",
   "directories": {

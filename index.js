@@ -92,7 +92,8 @@ class ResultStore {
 
         // anything else is an arbitrary key/val to store
         for (const key in obj) {
-            if (all_opts.indexOf(key) !== -1) continue; // weed out our keys
+            if (all_opts.includes(key)) continue; // weed out our keys
+            if (obj[key] === undefined) continue; // ignore keys w/undef value
             result[key] = obj[key];            // save the rest
         }
 
