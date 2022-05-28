@@ -39,6 +39,7 @@ jobs:
 
   test-win:
     needs: lint
+    if: ${{ false }}  # needs redis server
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
