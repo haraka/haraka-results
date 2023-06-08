@@ -2,6 +2,13 @@
 #### N.N.N - YYYY-MM-DD
 
 
+### [2.2.3] - 2023-06-08
+
+- ci: add on pull_request
+- dev: expand .gitignore
+- packaging: add .npmignore
+
+
 #### 2.2.2 - 2022-05-28
 
 - feat: add ignores keys with undefined values
@@ -67,3 +74,4 @@
 
 
 #### 1.0.0  - initial release
+[2.2.3]: https://github.com/haraka/haraka-results/releases/tag/2.2.3
