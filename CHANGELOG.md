@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 - ci: updated ci.yml
 - doc(CHANGES): rename Changes.md -> CHANGELOG.md
+- doc(CONTRIBUTORS): added
 - populate [files] in package.json. Delete .npmignore.
 - dep: eslint-plugin-haraka -> @haraka/eslint-config
 - lint: remove duplicate / stale rules from .eslintrc
