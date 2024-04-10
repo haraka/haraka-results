@@ -1,6 +1,16 @@
+# Changelog
 
-#### N.N.N - YYYY-MM-DD
+The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+### Unreleased
+
+### [2.2.4] - 2024-04-10
+
+- ci: updated ci.yml
+- doc(CHANGES): rename Changes.md -> CHANGELOG.md
+- populate [files] in package.json. Delete .npmignore.
+- dep: eslint-plugin-haraka -> @haraka/eslint-config
+- lint: remove duplicate / stale rules from .eslintrc
 
 ### [2.2.3] - 2023-06-08
 
@@ -72,6 +82,11 @@
 * depend on haraka-config
     * vs ./config, which doesn't work for npm packaged plugin tests
 
-
 #### 1.0.0  - initial release
-[2.2.3]: https://github.com/haraka/haraka-results/releases/tag/2.2.3
+
+[2.1.0]: https://github.com/haraka/haraka-results/releases/tag/2.1.0
+[2.2.0]: https://github.com/haraka/haraka-results/releases/tag/2.2.0
+[2.2.1]: https://github.com/haraka/haraka-results/releases/tag/2.2.1
+[2.2.2]: https://github.com/haraka/haraka-results/releases/tag/2.2.2
+[2.2.3]: https://github.com/haraka/haraka-results/releases/tag/v2.2.3
+[2.2.4]: https://github.com/haraka/haraka-results/releases/tag/v2.2.4
