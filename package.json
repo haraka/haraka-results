@@ -1,6 +1,6 @@
 {
   "name": "haraka-results",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "Haraka results store for connections and transactions",
   "main": "index.js",
   "directories": {
@@ -9,11 +9,19 @@
   "engines": {
     "node": ">=14"
   },
+  "files": [
+    "CHANGELOG.md",
+    "config"
+  ],
   "scripts": {
-    "cover": "npx istanbul cover npm run test",
-    "lint": "npx eslint *.js test/*.js",
-    "lintfix": "npx eslint --fix *.js test/*.js",
-    "test": "npx mocha"
+    "format": "npm run prettier:fix && npm run lint:fix",
+    "lint": "npx eslint@^8 *.js test",
+    "lint:fix": "npx eslint@^8 *.js test --fix",
+    "prettier": "npx prettier . --check",
+    "prettier:fix": "npx prettier . --write --log-level=warn",
+    "test": "npx mocha@10",
+    "versions": "npx @msimerson/dependency-version-checker check",
+    "versions:fix": "npx @msimerson/dependency-version-checker update && npm run prettier:fix"
   },
   "repository": {
     "type": "git",
@@ -32,15 +40,13 @@
   },
   "homepage": "https://github.com/haraka/haraka-results#readme",
   "devDependencies": {
-    "eslint": ">=8",
-    "eslint-plugin-haraka": "*",
-    "haraka-test-fixtures": "*",
-    "mocha": "*"
+    "@haraka/eslint-config": "^1.1.3",
+    "haraka-test-fixtures": "^1.3.6"
   },
   "dependencies": {
-    "haraka-config": "*"
+    "haraka-config": "^1.1.0"
   },
   "optionalDependencies": {
-    "redis": "^4.1.0"
+    "redis": "^4.6.13"
   }
 }

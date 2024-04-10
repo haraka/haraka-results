@@ -12,8 +12,8 @@ Add, log, retrieve, and share the results of plugin tests.
 Results is a structured way of storing results from plugins across a
 session, allowing those results to be retrieved later or by other plugins.
 
-Results objects are present on every Haraka connection *and* transaction. When
-in a SMTP transaction, results from *both* are applicable to that transaction.
+Results objects are present on every Haraka connection _and_ transaction. When
+in a SMTP transaction, results from _both_ are applicable to that transaction.
 
 ## Usage
 
@@ -47,9 +47,9 @@ Store the results in the transaction (vs connection):
 Each plugin can have custom settings in results.ini to control results logging.
 There are three options available: hide, order, and debug.
 
-* hide - a comma separated list of results to hide from the output
-* order - a comman separated list, specifing the order of items in the output
-* debug - log debug messages every time results are called
+- hide - a comma separated list of results to hide from the output
+- order - a comman separated list, specifing the order of items in the output
+- debug - log debug messages every time results are called
 
 ```ini
 ; put this in config/results.ini
@@ -93,12 +93,11 @@ In addition to appending values to the predefined lists, arbitrary results
 can be stored in the cache:
 
 ```js
-    results.add(this, {my_result: 'anything I want'})
+results.add(this, { my_result: 'anything I want' })
 ```
 
 When arbirary values are stored, they are listed first in the log output. Their
 display can be suppressed with the **hide** option in results.ini.
-
 
 #### incr
 
@@ -106,12 +105,11 @@ Increment counters. The argument to incr is an object with counter names and
 increment values. Examples:
 
 ```js
-    results.incr(this, {unrecognized_commands: 1})
+results.incr(this, { unrecognized_commands: 1 })
 
-    results.incr(this, {karma: -1})
-    results.incr(this, {karma:  2})
+results.incr(this, { karma: -1 })
+results.incr(this, { karma: 2 })
 ```
-
 
 #### push
 
@@ -119,19 +117,18 @@ Append items onto arrays. The argument to push is an object with array names and
 the new value to be appended to the array. Examples:
 
 ```js
-    results.push(this, {dns_recs: 'name1'})
-    results.push(this, {dns_recs: 'name2'})
+results.push(this, { dns_recs: 'name1' })
+results.push(this, { dns_recs: 'name2' })
 ```
 
 #### collate
 
 ```js
-    const summary = results.collate(this)
+const summary = results.collate(this)
 ```
 
 Formats the contents of the result cache and returns them. This function is
 called internally by `add()` after each update.
-
 
 #### get
 
@@ -161,49 +158,48 @@ Check result contents for string or pattern matches.
 Syntax:
 
 ```js
-    results.has('plugin_name', 'result_name', 'search_term')
+results.has('plugin_name', 'result_name', 'search_term')
 ```
 
-* result\_name: the name of an array or string in the result object
-* search\_term: a string or RegExp object
-
+- result_name: the name of an array or string in the result object
+- search_term: a string or RegExp object
 
 ### More Examples
 
 #### Store Results:
 
 ```js
-    results.add(this, {pass: 'some_test'})
-    results.add(this, {pass: 'some_test(with reason)'})
+results.add(this, { pass: 'some_test' })
+results.add(this, { pass: 'some_test(with reason)' })
 ```
 
 #### Retrieve exact match with **get**:
 
 ```js
-    if (results.get('plugin_name').pass.indexOf('some_test') !== -1) {
-        // some_test passed (1x)
-    }
+if (results.get('plugin_name').pass.indexOf('some_test') !== -1) {
+  // some_test passed (1x)
+}
 ```
 
 #### Retrieve a string match with **has**
 
 ```js
-    if (results.has('plugin_name', 'pass', 'some_test')) {
-        // some_test passed (1x)
-    }
+if (results.has('plugin_name', 'pass', 'some_test')) {
+  // some_test passed (1x)
+}
 ```
 
 The syntax for using **has** is a little more pleasant.
 
 Both options require one to check for each reason which is unpleasant when
-and all we really want to know is if some\_test passed or not.
+and all we really want to know is if some_test passed or not.
 
 #### Retrieve a matching pattern:
 
 ```js
-    if (results.has('plugin_name', 'pass', /^some_test/)) {
-        // some_test passed (2x)
-    }
+if (results.has('plugin_name', 'pass', /^some_test/)) {
+  // some_test passed (2x)
+}
 ```
 
 ### Private Results
@@ -214,7 +210,7 @@ human_html output, prefix the name of the key with an underscore.
 Example:
 
 ```js
-    results.add(this, { _hidden: 'some data' })
+results.add(this, { _hidden: 'some data' })
 ```
 
 ## Redis Pub/Sub
@@ -229,28 +225,26 @@ This is from the karma plugin subscribing on the `connect_init` hook:
 
 ```js
 exports.register = function (next, server) {
-    this.inherits('redis')
+  this.inherits('redis')
 
-    register_hook('connect_init', 'redis_subscribe');
-    register_hook('disconnect',   'redis_unsubscribe');
+  register_hook('connect_init', 'redis_subscribe')
+  register_hook('disconnect', 'redis_unsubscribe')
 }
 
 exports.redis_subscribe = function (next, connection) {
-
-    this.redis_subscribe(connection, function () {
-        connection.notes.redis.on('pmessage', (pattern, channel, message) => {
-            // do stuff with messages that look like this
-            // {"plugin":"karma","result":{"fail":"spamassassin.hits"}}
-            // {"plugin":"geoip","result":{"country":"CN"}}
-        })
-        next()
+  this.redis_subscribe(connection, function () {
+    connection.notes.redis.on('pmessage', (pattern, channel, message) => {
+      // do stuff with messages that look like this
+      // {"plugin":"karma","result":{"fail":"spamassassin.hits"}}
+      // {"plugin":"geoip","result":{"country":"CN"}}
     })
+    next()
+  })
 }
 exports.redis_unsubscribe = function (next, connection) {
-    this.redis_unsubscribe(connection)
+  this.redis_unsubscribe(connection)
 }
 ```
-
 
 [ci-img]: https://github.com/haraka/haraka-results/actions/workflows/ci.yml/badge.svg
 [ci-url]: https://github.com/haraka/haraka-results/actions/workflows/ci.yml
