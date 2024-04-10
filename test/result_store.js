@@ -209,7 +209,7 @@ describe('redis_publish', () => {
 
     await sub_db.connect()
 
-    await sub_db.pSubscribe('*', (message, channel) => {
+    await sub_db.pSubscribe('*', (message) => {
       assert.equal(JSON.parse(message).result.pass, 'the test')
       conn.server.notes.redis.quit()
       sub_db.quit()
