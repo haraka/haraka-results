@@ -198,7 +198,7 @@ describe('redis_publish', () => {
       },
     }
     await server.notes.redis.connect()
-    this.connection = new fixtures.connection.createConnection(null, server)
+    this.connection = new fixtures.connection.createConnection({}, server)
     this.connection.results = new Results(this.connection)
   })
 

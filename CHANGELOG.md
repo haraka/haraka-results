@@ -6,7 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### [2.2.5] - 2025-01-26
 
-- 
+- deps(eslint): upgrade to v9
+- deps: bump versions
 
 ### [2.2.4] - 2024-04-10
 
