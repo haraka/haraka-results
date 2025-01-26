@@ -3,7 +3,6 @@
 [![Build Status][ci-img]][ci-url]
 [![Code Coverage][cov-img]][cov-url]
 [![Code Climate][clim-img]][clim-url]
-[![NPM][npm-img]][npm-url]
 
 Add, log, retrieve, and share the results of plugin tests.
 
@@ -252,5 +251,3 @@ exports.redis_unsubscribe = function (next, connection) {
 [cov-url]: https://codecov.io/github/haraka/haraka-results
 [clim-img]: https://codeclimate.com/github/haraka/haraka-results/badges/gpa.svg
 [clim-url]: https://codeclimate.com/github/haraka/haraka-results
-[npm-img]: https://nodei.co/npm/haraka-results.png
-[npm-url]: https://www.npmjs.com/package/haraka-results

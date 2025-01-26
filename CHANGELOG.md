@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Unreleased
 
+### [2.2.5] - 2025-01-26
+
+- 
+
 ### [2.2.4] - 2024-04-10
 
 - deps: bump versions
@@ -84,3 +88,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 [2.2.2]: https://github.com/haraka/haraka-results/releases/tag/2.2.2
 [2.2.3]: https://github.com/haraka/haraka-results/releases/tag/v2.2.3
 [2.2.4]: https://github.com/haraka/haraka-results/releases/tag/v2.2.4
+[2.2.5]: https://github.com/haraka/haraka-results/releases/tag/v2.2.5
