@@ -23,6 +23,10 @@
     "versions": "npx dependency-version-checker check",
     "versions:fix": "npx dependency-version-checker update && npm run prettier:fix"
   },
+  "prettier": {
+    "singleQuote": true,
+    "semi": false
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/haraka/haraka-results.git"

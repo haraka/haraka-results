@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### [2.2.5] - 2025-01-26
 
+- prettier: move config into package.json
 - deps(eslint): upgrade to v9
 - deps: bump versions
 
