@@ -1,4 +1,4 @@
-const assert = require('assert')
+const assert = require('node:assert')
 
 const redis = require('redis')
 
@@ -118,6 +118,7 @@ describe('has', () => {
       false,
     )
   })
+
   it('has, string, string', async function () {
     this.connection.results.add('test_plugin', { random_key: 'string value' })
     assert.ok(
@@ -128,6 +129,7 @@ describe('has', () => {
       this.connection.results.has('test_plugin', 'random_key', 'strings'),
     )
   })
+
   it('has, string, regex', async function () {
     this.connection.results.add('test_plugin', { random_key: 'string value' })
     assert.ok(
