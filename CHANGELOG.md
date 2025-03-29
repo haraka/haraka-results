@@ -8,7 +8,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 - fix: update deprecated util.isError -> util.types.isNativeError
 
-
 ### [2.2.5] - 2025-01-26
 
 - prettier: move config into package.json
