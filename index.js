@@ -2,7 +2,7 @@
 'use strict'
 
 const config = require('haraka-config')
-const util = require('util')
+const util = require('node:util')
 
 // see docs in docs/Results.md
 const append_lists = ['msg', 'pass', 'fail', 'skip', 'err']
@@ -237,7 +237,7 @@ class ResultStore {
     if (obj.emit) this.conn.loginfo(plugin, result.human) // by request
     if (obj.err) {
       // Handle error objects by logging the message
-      if (util.isError(obj.err)) {
+      if (util.types.isNativeError(obj.err)) {
         this.conn.logerror(plugin, obj.err.message)
       } else {
         this.conn.logerror(plugin, obj.err)

@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Unreleased
 
+### [2.2.6] - 2025-03-29
+
+- fix: update deprecated util.isError -> util.types.isNativeError
+
 ### [2.2.5] - 2025-01-26
 
 - prettier: move config into package.json
@@ -91,3 +95,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 [2.2.3]: https://github.com/haraka/haraka-results/releases/tag/v2.2.3
 [2.2.4]: https://github.com/haraka/haraka-results/releases/tag/v2.2.4
 [2.2.5]: https://github.com/haraka/haraka-results/releases/tag/v2.2.5
+[2.2.6]: https://github.com/haraka/haraka-results/releases/tag/v2.2.6
