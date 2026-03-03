@@ -4,6 +4,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Unreleased
 
+### [2.2.7] - 2026-03-03
+
+- 
+- deps: bump versions (notable: redis 4 -> 5)
+
 ### [2.2.6] - 2025-03-29
 
 - fix: update deprecated util.isError -> util.types.isNativeError
@@ -96,3 +101,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 [2.2.4]: https://github.com/haraka/haraka-results/releases/tag/v2.2.4
 [2.2.5]: https://github.com/haraka/haraka-results/releases/tag/v2.2.5
 [2.2.6]: https://github.com/haraka/haraka-results/releases/tag/v2.2.6
+[2.2.7]: https://github.com/haraka/haraka-results/releases/tag/v2.2.7
