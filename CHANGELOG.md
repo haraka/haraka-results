@@ -6,7 +6,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### [2.2.7] - 2026-03-03
 
--
 - deps: bump versions (notable: redis 4 -> 5)
 
 ### [2.2.6] - 2025-03-29
