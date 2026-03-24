@@ -4,6 +4,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Unreleased
 
+### [2.3.0] - 2026-03-24
+
+#### Added
+
+- 
+
+#### Fixed
+
+- 
+
+#### Changed
+
+- 
+
+
 ### [2.2.7] - 2026-03-03
 
 - deps: bump versions (notable: redis 4 -> 5)
@@ -101,3 +116,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 [2.2.5]: https://github.com/haraka/haraka-results/releases/tag/v2.2.5
 [2.2.6]: https://github.com/haraka/haraka-results/releases/tag/v2.2.6
 [2.2.7]: https://github.com/haraka/haraka-results/releases/tag/v2.2.7
+[2.3.0]: https://github.com/haraka/haraka-results/releases/tag/v2.3.0
