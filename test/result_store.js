@@ -49,7 +49,9 @@ describe('default_result', () => {
 
   it('init push, other', () => {
     this.connection.results.push('test_plugin', { other: 'test2' })
-    assert.deepEqual(this.connection.results.get('test_plugin').other, ['test2'])
+    assert.deepEqual(this.connection.results.get('test_plugin').other, [
+      'test2',
+    ])
   })
 })
 
@@ -64,7 +66,9 @@ describe('add err unpacking', () => {
 
   it('plain string err is stored as-is', () => {
     this.connection.results.add('test_plugin', { err: 'plain error' })
-    assert.deepEqual(this.connection.results.get('test_plugin').err, ['plain error'])
+    assert.deepEqual(this.connection.results.get('test_plugin').err, [
+      'plain error',
+    ])
   })
 
   it('array of Error objects unpacks all messages', () => {
@@ -110,14 +114,20 @@ describe('has', () => {
   it('has, list, boolean', () => {
     this.connection.results.add('test_plugin', { msg: true })
     assert.equal(this.connection.results.has('test_plugin', 'msg', true), true)
-    assert.equal(this.connection.results.has('test_plugin', 'msg', false), false)
+    assert.equal(
+      this.connection.results.has('test_plugin', 'msg', false),
+      false,
+    )
   })
 
   it('has, list, regexp', () => {
     this.connection.results.add('test_plugin', { pass: 'test pass' })
     assert.ok(this.connection.results.has('test_plugin', 'pass', /test/))
     assert.ok(this.connection.results.has('test_plugin', 'pass', / pass/))
-    assert.equal(this.connection.results.has('test_plugin', 'pass', /not/), false)
+    assert.equal(
+      this.connection.results.has('test_plugin', 'pass', /not/),
+      false,
+    )
   })
 
   it('has, string, string', () => {
@@ -133,7 +143,9 @@ describe('has', () => {
 
   it('has, string, regex', () => {
     this.connection.results.add('test_plugin', { random_key: 'string value' })
-    assert.ok(this.connection.results.has('test_plugin', 'random_key', /string/))
+    assert.ok(
+      this.connection.results.has('test_plugin', 'random_key', /string/),
+    )
     assert.ok(this.connection.results.has('test_plugin', 'random_key', /value/))
     assert.equal(
       this.connection.results.has('test_plugin', 'random_key', /miss/),
@@ -142,7 +154,10 @@ describe('has', () => {
   })
 
   it('returns false for unknown plugin', () => {
-    assert.equal(this.connection.results.has('no_such_plugin', 'pass', 'x'), false)
+    assert.equal(
+      this.connection.results.has('no_such_plugin', 'pass', 'x'),
+      false,
+    )
   })
 
   it('returns false for unknown list on known plugin', () => {
@@ -170,7 +185,10 @@ describe('get', () => {
   })
 
   it('by plugin object', () => {
-    assert.equal(this.connection.results.get({ name: 'test_plugin' }).pass[0], 'foo')
+    assert.equal(
+      this.connection.results.get({ name: 'test_plugin' }).pass[0],
+      'foo',
+    )
   })
 
   it('by plugin name string', () => {
@@ -266,7 +284,9 @@ describe('_log return value', () => {
   })
 
   it('push returns the human-readable collation string', () => {
-    const human = this.connection.results.push('test_plugin', { pass: 'pushed' })
+    const human = this.connection.results.push('test_plugin', {
+      pass: 'pushed',
+    })
     assert.equal(typeof human, 'string')
     assert.ok(human.includes('pushed'))
   })
