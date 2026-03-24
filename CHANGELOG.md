@@ -4,6 +4,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Unreleased
 
+### [2.3.0] - 2026-03-24
+
+#### Added
+
+- error unpacking (add()): err values that are Error instances now store .message strings in the array instead of the Error object. Error objects logged with poor results `{}` for redis consumers.
+
+#### Fixed
+
+- fix(\_log): return this.human → return result.human
+- fix(\_log): plugin.name → this.resolve_plugin_name(plugin) (string plugins were silently losing their config-based ordering/hiding)
+
+#### Changed
+
+- es6/7:
+  - [].concat(...) → [...spread]
+  - for...in obj loops → Object.entries()
+  - indexOf() !== -1 → includes()
+  - more optional chaining
+- msg.match(search) → search.test()
+- test runner mocha -> node --test
+- test: default to strict
+- added 22 new tests, now at 97% (+6)
+
 ### [2.2.7] - 2026-03-03
 
 - deps: bump versions (notable: redis 4 -> 5)
@@ -101,3 +124,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 [2.2.5]: https://github.com/haraka/haraka-results/releases/tag/v2.2.5
 [2.2.6]: https://github.com/haraka/haraka-results/releases/tag/v2.2.6
 [2.2.7]: https://github.com/haraka/haraka-results/releases/tag/v2.2.7
+[2.3.0]: https://github.com/haraka/haraka-results/releases/tag/v2.3.0

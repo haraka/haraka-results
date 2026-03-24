@@ -249,5 +249,5 @@ exports.redis_unsubscribe = function (next, connection) {
 [ci-url]: https://github.com/haraka/haraka-results/actions/workflows/ci.yml
 [cov-img]: https://codecov.io/github/haraka/haraka-results/coverage.svg
 [cov-url]: https://codecov.io/github/haraka/haraka-results
-[clim-img]: https://codeclimate.com/github/haraka/haraka-results/badges/gpa.svg
-[clim-url]: https://codeclimate.com/github/haraka/haraka-results
+[clim-img]: https://qlty.sh/gh/haraka/projects/haraka-results/maintainability.svg
+[clim-url]: https://qlty.sh/gh/haraka/projects/haraka-results

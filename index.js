@@ -2,13 +2,13 @@
 'use strict'
 
 const config = require('haraka-config')
-const util = require('node:util')
+const { types } = require('node:util')
 
 // see docs in docs/Results.md
 const append_lists = ['msg', 'pass', 'fail', 'skip', 'err']
 const overwrite_lists = ['hide', 'order']
 const log_opts = ['emit', 'human', 'human_html']
-const all_opts = append_lists.concat(overwrite_lists, log_opts)
+const all_opts = [...append_lists, ...overwrite_lists, ...log_opts]
 let cfg
 
 class ResultStore {
@@ -37,8 +37,8 @@ class ResultStore {
   }
 
   _has_string(msg, search) {
-    if (typeof search === 'string' && search === msg) return true
-    if (typeof search === 'object' && msg.match(search)) return true
+    if (typeof search === 'string') return search === msg
+    if (search instanceof RegExp) return search.test(msg)
     return false
   }
 
@@ -51,7 +51,7 @@ class ResultStore {
           if (search === item) return true
           break
         case 'object':
-          if (item.match(search)) return true
+          if (search instanceof RegExp && search.test(item)) return true
           break
       }
     }
@@ -62,7 +62,7 @@ class ResultStore {
     if (!cfg.main.redis_publish) return
     if (!this.conn.server?.notes?.redis) return
 
-    const channel = `result-${this.conn.transaction ? this.conn.transaction.uuid : this.conn.uuid}`
+    const channel = `result-${this.conn.transaction?.uuid ?? this.conn.uuid}`
     this.conn.server.notes.redis.publish(
       channel,
       JSON.stringify({ plugin: name, result: obj }),
@@ -82,7 +82,13 @@ class ResultStore {
     // these are arrays each invocation appends to
     for (const key of append_lists) {
       if (!obj[key]) continue
-      result[key] = this._append_to_array(result[key], obj[key])
+      let val = obj[key]
+      if (key === 'err') {
+        if (Array.isArray(val))
+          val = val.map((e) => (types.isNativeError(e) ? e.message : e))
+        else if (types.isNativeError(val)) val = val.message
+      }
+      result[key] = this._append_to_array(result[key], val)
     }
 
     // these arrays are overwritten when passed
@@ -92,10 +98,10 @@ class ResultStore {
     }
 
     // anything else is an arbitrary key/val to store
-    for (const key in obj) {
+    for (const [key, val] of Object.entries(obj)) {
       if (all_opts.includes(key)) continue // weed out our keys
-      if (obj[key] === undefined) continue // ignore keys w/undef value
-      result[key] = obj[key] // save the rest
+      if (val === undefined) continue // ignore keys w/undef value
+      result[key] = val
     }
 
     return this._log(plugin, result, obj)
@@ -103,7 +109,6 @@ class ResultStore {
 
   _append_to_array(array, item) {
     if (Array.isArray(item)) return array.concat(item)
-
     array.push(item)
     return array
   }
@@ -118,11 +123,10 @@ class ResultStore {
 
     const pub = {}
 
-    for (const key in obj) {
-      let val = parseFloat(obj[key]) || 0
-      if (isNaN(val)) val = 0
+    for (const [key, raw] of Object.entries(obj)) {
+      const val = parseFloat(raw) || 0
       if (isNaN(result[key])) result[key] = 0
-      result[key] = parseFloat(result[key]) + parseFloat(val)
+      result[key] = parseFloat(result[key]) + val
       pub[key] = result[key]
     }
 
@@ -139,9 +143,9 @@ class ResultStore {
 
     this.redis_publish(name, obj)
 
-    for (const key in obj) {
+    for (const [key, val] of Object.entries(obj)) {
       if (!result[key]) result[key] = []
-      result[key] = this._append_to_array(result[key], obj[key])
+      result[key] = this._append_to_array(result[key], val)
     }
 
     return this._log(plugin, result, obj)
@@ -160,7 +164,7 @@ class ResultStore {
 
   resolve_plugin_name(thing) {
     if (typeof thing === 'string') return thing
-    if (typeof thing === 'object' && thing.name) return thing.name
+    if (typeof thing === 'object' && thing?.name) return thing.name
     return
   }
 
@@ -182,13 +186,13 @@ class ResultStore {
 
     // and then supporting information
     let array = append_lists // default
-    if (order && order.length) array = order // config file
-    if (result.order && result.order.length) array = result.order // caller
+    if (order.length) array = order // config file
+    if (result.order?.length) array = result.order // caller
 
     for (const key of array) {
       if (!result[key]) continue
       if (!result[key].length) continue
-      if (hide && hide.length && hide.indexOf(key) !== -1) continue
+      if (hide.length && hide.includes(key)) continue
       r.push(`${key}:${result[key].join(', ')}`)
     }
 
@@ -197,33 +201,25 @@ class ResultStore {
 
   _pre_defined(key, res, hide) {
     if (key[0] === '_') return false // 'private' keys
-    if (all_opts.indexOf(key) !== -1) return false // these get shown later.
-    if (hide.length && hide.indexOf(key) !== -1) return false
-    if (typeof res === 'object') {
-      if (Array.isArray(res)) {
-        if (res.length === 0) return false
-      } else {
-        return false
-      }
-    }
+    if (all_opts.includes(key)) return false // these get shown later
+    if (hide.length && hide.includes(key)) return false
+    if (Array.isArray(res)) return res.length > 0
+    if (typeof res === 'object') return false
     return true
   }
 
   _get_order(c) {
-    if (!c || !c.order) return []
+    if (!c?.order) return []
     return c.order.trim().split(/[,; ]+/)
   }
 
   _get_hide(c) {
-    if (!c || !c.hide) return []
-    return c.hide
-      .trim()
-      .trim()
-      .split(/[,; ]+/)
+    if (!c?.hide) return []
+    return c.hide.trim().split(/[,; ]+/)
   }
 
   _log(plugin, result, obj) {
-    const name = plugin.name
+    const name = this.resolve_plugin_name(plugin)
 
     // collate results
     result.human = obj.human
@@ -236,19 +232,15 @@ class ResultStore {
     // logging results
     if (obj.emit) this.conn.loginfo(plugin, result.human) // by request
     if (obj.err) {
-      // Handle error objects by logging the message
-      if (util.types.isNativeError(obj.err)) {
-        this.conn.logerror(plugin, obj.err.message)
-      } else {
-        this.conn.logerror(plugin, obj.err)
-      }
+      const errMsg = types.isNativeError(obj.err) ? obj.err.message : obj.err
+      this.conn.logerror(plugin, errMsg)
     }
     if (!obj.emit && !obj.err) {
       // by config
       const pic = cfg[name]
-      if (pic && pic.debug) this.conn.logdebug(plugin, result.human)
+      if (pic?.debug) this.conn.logdebug(plugin, result.human)
     }
-    return this.human
+    return result.human
   }
 }
 
