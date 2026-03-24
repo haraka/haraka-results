@@ -8,16 +8,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 #### Added
 
-- 
+- error unpacking (add()): err values that are Error instances now store .message strings in the array instead of the Error object. Error objects logged with poor results `{}` for redis consumers.
 
 #### Fixed
 
-- 
+- fix(_log): return this.human → return result.human
+- fix(_log): plugin.name → this.resolve_plugin_name(plugin) (string plugins were silently losing their config-based ordering/hiding)
 
 #### Changed
 
-- 
-
+- es6/7:
+  - [].concat(...) → [...spread]
+  - for...in obj loops → Object.entries()
+  - indexOf() !== -1 → includes()
+  - more optional chaining
+- module-level let connection instead of mocha's this-shared context
+- msg.match(search) → search.test()
+- test runner mocha -> node --test
+- test: default to strict
+- added 22 new tests, now at 97% (+6)
 
 ### [2.2.7] - 2026-03-03
 

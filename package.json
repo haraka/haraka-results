@@ -19,10 +19,10 @@
     "lint:fix": "npx eslint *.js test --fix",
     "prettier": "npx prettier . --check",
     "prettier:fix": "npx prettier . --write --log-level=warn",
-    "test": "npx mocha",
+    "test": "node --test test/result_store.js",
     "versions": "npx npm-dep-mgr check",
     "versions:fix": "npx npm-dep-mgr update",
-    "test:coverage": "npx c8 --reporter=text --reporter=text-summary npm test"
+    "test:coverage": "npx c8 --reporter=text --reporter=text-summary node --test test/result_store.js"
   },
   "prettier": {
     "singleQuote": true,
