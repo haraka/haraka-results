@@ -12,8 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 #### Fixed
 
-- fix(_log): return this.human → return result.human
-- fix(_log): plugin.name → this.resolve_plugin_name(plugin) (string plugins were silently losing their config-based ordering/hiding)
+- fix(\_log): return this.human → return result.human
+- fix(\_log): plugin.name → this.resolve_plugin_name(plugin) (string plugins were silently losing their config-based ordering/hiding)
 
 #### Changed
 

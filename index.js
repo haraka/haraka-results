@@ -84,7 +84,8 @@ class ResultStore {
       if (!obj[key]) continue
       let val = obj[key]
       if (key === 'err') {
-        if (Array.isArray(val)) val = val.map((e) => (types.isNativeError(e) ? e.message : e))
+        if (Array.isArray(val))
+          val = val.map((e) => (types.isNativeError(e) ? e.message : e))
         else if (types.isNativeError(val)) val = val.message
       }
       result[key] = this._append_to_array(result[key], val)

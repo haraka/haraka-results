@@ -43,7 +43,10 @@ describe('default_result', () => {
   it('init push array', () => {
     connection.results.push('test_plugin', { pass: 'test1' })
     connection.results.push('test_plugin', { pass: ['test2'] })
-    assert.deepEqual(connection.results.get('test_plugin').pass, ['test1', 'test2'])
+    assert.deepEqual(connection.results.get('test_plugin').pass, [
+      'test1',
+      'test2',
+    ])
   })
 
   it('init push, other', () => {
@@ -54,7 +57,9 @@ describe('default_result', () => {
 
 describe('add err unpacking', () => {
   it('Error object is stored as message string', () => {
-    connection.results.add('test_plugin', { err: new Error('something went wrong') })
+    connection.results.add('test_plugin', {
+      err: new Error('something went wrong'),
+    })
     const r = connection.results.get('test_plugin')
     assert.deepEqual(r.err, ['something went wrong'])
   })
@@ -68,22 +73,34 @@ describe('add err unpacking', () => {
     connection.results.add('test_plugin', {
       err: [new Error('first'), new Error('second')],
     })
-    assert.deepEqual(connection.results.get('test_plugin').err, ['first', 'second'])
+    assert.deepEqual(connection.results.get('test_plugin').err, [
+      'first',
+      'second',
+    ])
   })
 
   it('mixed array of errors and strings unpacks only Error instances', () => {
     connection.results.add('test_plugin', {
       err: [new Error('err-obj'), 'plain-str'],
     })
-    assert.deepEqual(connection.results.get('test_plugin').err, ['err-obj', 'plain-str'])
+    assert.deepEqual(connection.results.get('test_plugin').err, [
+      'err-obj',
+      'plain-str',
+    ])
   })
 })
 
 describe('has', () => {
   it('has, list, string', () => {
     connection.results.add('test_plugin', { pass: 'test pass' })
-    assert.equal(connection.results.has('test_plugin', 'pass', 'test pass'), true)
-    assert.equal(connection.results.has('test_plugin', 'pass', 'test miss'), false)
+    assert.equal(
+      connection.results.has('test_plugin', 'pass', 'test pass'),
+      true,
+    )
+    assert.equal(
+      connection.results.has('test_plugin', 'pass', 'test miss'),
+      false,
+    )
   })
 
   it('has, list, number', () => {
@@ -107,15 +124,23 @@ describe('has', () => {
 
   it('has, string, string', () => {
     connection.results.add('test_plugin', { random_key: 'string value' })
-    assert.ok(connection.results.has('test_plugin', 'random_key', 'string value'))
-    assert.equal(connection.results.has('test_plugin', 'random_key', 'strings'), false)
+    assert.ok(
+      connection.results.has('test_plugin', 'random_key', 'string value'),
+    )
+    assert.equal(
+      connection.results.has('test_plugin', 'random_key', 'strings'),
+      false,
+    )
   })
 
   it('has, string, regex', () => {
     connection.results.add('test_plugin', { random_key: 'string value' })
     assert.ok(connection.results.has('test_plugin', 'random_key', /string/))
     assert.ok(connection.results.has('test_plugin', 'random_key', /value/))
-    assert.equal(connection.results.has('test_plugin', 'random_key', /miss/), false)
+    assert.equal(
+      connection.results.has('test_plugin', 'random_key', /miss/),
+      false,
+    )
   })
 
   it('returns false for unknown plugin', () => {
@@ -124,7 +149,10 @@ describe('has', () => {
 
   it('returns false for unknown list on known plugin', () => {
     connection.results.add('test_plugin', { pass: 'foo' })
-    assert.equal(connection.results.has('test_plugin', 'no_such_list', 'foo'), false)
+    assert.equal(
+      connection.results.has('test_plugin', 'no_such_list', 'foo'),
+      false,
+    )
   })
 })
 
@@ -210,11 +238,17 @@ describe('incr', () => {
 
 describe('resolve_plugin_name', () => {
   it('returns string unchanged', () => {
-    assert.equal(connection.results.resolve_plugin_name('test_plugin'), 'test_plugin')
+    assert.equal(
+      connection.results.resolve_plugin_name('test_plugin'),
+      'test_plugin',
+    )
   })
 
   it('returns name property from object', () => {
-    assert.equal(connection.results.resolve_plugin_name({ name: 'test_plugin' }), 'test_plugin')
+    assert.equal(
+      connection.results.resolve_plugin_name({ name: 'test_plugin' }),
+      'test_plugin',
+    )
   })
 
   it('returns undefined for null', () => {
