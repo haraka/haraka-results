@@ -22,7 +22,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
   - for...in obj loops → Object.entries()
   - indexOf() !== -1 → includes()
   - more optional chaining
-- module-level let connection instead of mocha's this-shared context
 - msg.match(search) → search.test()
 - test runner mocha -> node --test
 - test: default to strict
