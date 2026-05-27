@@ -1,3 +1,4 @@
 [submodule ".release"]
 	path = .release
 	url = https://github.com/msimerson/.release
+	ignore = dirty
