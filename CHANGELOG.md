@@ -4,6 +4,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Unreleased
 
+### [2.3.1] - 2026-05-26
+
+- fix: prevent prototype pollution via unsafe keys
+- fix: falsy value loss in both the append_lists and overwrite_lists
+- fix: unhandled Redis promise on the publish() call
+- doc(README): updated description to say the channel uses transaction.uuid when processing a message, else connection.uuid
+
 ### [2.3.0] - 2026-03-24
 
 #### Added
@@ -12,8 +19,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 #### Fixed
 
-- fix(\_log): return this.human → return result.human
-- fix(\_log): plugin.name → this.resolve_plugin_name(plugin) (string plugins were silently losing their config-based ordering/hiding)
+- fix(log): return this.human → return result.human
+- fix(log): plugin.name → this.resolve_plugin_name(plugin) (string plugins were silently losing their config-based ordering/hiding)
 
 #### Changed
 
@@ -125,3 +132,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 [2.2.6]: https://github.com/haraka/haraka-results/releases/tag/v2.2.6
 [2.2.7]: https://github.com/haraka/haraka-results/releases/tag/v2.2.7
 [2.3.0]: https://github.com/haraka/haraka-results/releases/tag/v2.3.0
+[2.3.1]: https://github.com/haraka/haraka-results/releases/tag/v2.3.1

@@ -5,6 +5,7 @@ const config = require('haraka-config')
 const { types } = require('node:util')
 
 // see docs in docs/Results.md
+const UNSAFE_KEYS = new Set(['__proto__', 'constructor', 'prototype'])
 const append_lists = ['msg', 'pass', 'fail', 'skip', 'err']
 const overwrite_lists = ['hide', 'order']
 const log_opts = ['emit', 'human', 'human_html']
@@ -14,7 +15,7 @@ let cfg
 class ResultStore {
   constructor(conn) {
     this.conn = conn
-    this.store = {}
+    this.store = Object.create(null)
     cfg = config.get('results.ini', {
       booleans: ['+main.redis_publish'],
     })
@@ -63,10 +64,12 @@ class ResultStore {
     if (!this.conn.server?.notes?.redis) return
 
     const channel = `result-${this.conn.transaction?.uuid ?? this.conn.uuid}`
-    this.conn.server.notes.redis.publish(
-      channel,
-      JSON.stringify({ plugin: name, result: obj }),
-    )
+    this.conn.server.notes.redis
+      .publish(channel, JSON.stringify({ plugin: name, result: obj }))
+      .catch((err) => {
+        const msg = err?.message ?? String(err)
+        this.conn.logerror('results', `redis publish failed: ${msg}`)
+      })
   }
 
   add(plugin, obj) {
@@ -81,8 +84,9 @@ class ResultStore {
 
     // these are arrays each invocation appends to
     for (const key of append_lists) {
-      if (!obj[key]) continue
+      if (!Object.hasOwn(obj, key)) continue
       let val = obj[key]
+      if (val === undefined) continue
       if (key === 'err') {
         if (Array.isArray(val))
           val = val.map((e) => (types.isNativeError(e) ? e.message : e))
@@ -93,13 +97,15 @@ class ResultStore {
 
     // these arrays are overwritten when passed
     for (const key of overwrite_lists) {
-      if (!obj[key]) continue
+      if (!Object.hasOwn(obj, key)) continue
+      if (obj[key] === undefined) continue
       result[key] = obj[key]
     }
 
     // anything else is an arbitrary key/val to store
     for (const [key, val] of Object.entries(obj)) {
       if (all_opts.includes(key)) continue // weed out our keys
+      if (UNSAFE_KEYS.has(key)) continue
       if (val === undefined) continue // ignore keys w/undef value
       result[key] = val
     }
@@ -124,6 +130,7 @@ class ResultStore {
     const pub = {}
 
     for (const [key, raw] of Object.entries(obj)) {
+      if (UNSAFE_KEYS.has(key)) continue
       const val = parseFloat(raw) || 0
       if (isNaN(result[key])) result[key] = 0
       result[key] = parseFloat(result[key]) + val
@@ -144,6 +151,7 @@ class ResultStore {
     this.redis_publish(name, obj)
 
     for (const [key, val] of Object.entries(obj)) {
+      if (UNSAFE_KEYS.has(key)) continue
       if (!result[key]) result[key] = []
       result[key] = this._append_to_array(result[key], val)
     }

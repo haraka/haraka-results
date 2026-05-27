@@ -217,8 +217,9 @@ results.add(this, { _hidden: 'some data' })
 If a redis client is found on server.notes.redis, then new results are JSON
 encoded and published to Redis on the channel named `result-${UUID}`. This
 feature can be disabled by setting `[main]redis_publish=false` in results.ini.
-Plugins can recieve the events by psubscribing (pattern subscribe) to the
-channel named `result-${UUID}*` where ${UUID} is the connection UUID.
+Plugins can receive the events by psubscribing (pattern subscribe) to the
+channel named `result-${UUID}*` where `${UUID}` is the transaction UUID when
+processing a message, or the connection UUID otherwise.
 
 This is from the karma plugin subscribing on the `connect_init` hook:
 
