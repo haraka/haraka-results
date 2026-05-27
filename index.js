@@ -74,43 +74,58 @@ class ResultStore {
 
   add(plugin, obj) {
     const name = this.resolve_plugin_name(plugin)
+    const result = this._get_or_create(name)
+
+    this.redis_publish(name, obj)
+    this._merge_appends(result, obj)
+    this._merge_overwrites(result, obj)
+    this._merge_arbitrary(result, obj)
+
+    return this._log(plugin, result, obj)
+  }
+
+  _get_or_create(name) {
     let result = this.store[name]
     if (!result) {
       result = default_result()
       this.store[name] = result
     }
+    return result
+  }
 
-    this.redis_publish(name, obj)
+  _unpack_err(val) {
+    if (Array.isArray(val)) {
+      return val.map((e) => (types.isNativeError(e) ? e.message : e))
+    }
+    if (types.isNativeError(val)) return val.message
+    return val
+  }
 
-    // these are arrays each invocation appends to
+  _merge_appends(result, obj) {
     for (const key of append_lists) {
       if (!Object.hasOwn(obj, key)) continue
       let val = obj[key]
       if (val === undefined) continue
-      if (key === 'err') {
-        if (Array.isArray(val))
-          val = val.map((e) => (types.isNativeError(e) ? e.message : e))
-        else if (types.isNativeError(val)) val = val.message
-      }
+      if (key === 'err') val = this._unpack_err(val)
       result[key] = this._append_to_array(result[key], val)
     }
+  }
 
-    // these arrays are overwritten when passed
+  _merge_overwrites(result, obj) {
     for (const key of overwrite_lists) {
       if (!Object.hasOwn(obj, key)) continue
       if (obj[key] === undefined) continue
       result[key] = obj[key]
     }
+  }
 
-    // anything else is an arbitrary key/val to store
+  _merge_arbitrary(result, obj) {
     for (const [key, val] of Object.entries(obj)) {
-      if (all_opts.includes(key)) continue // weed out our keys
+      if (all_opts.includes(key)) continue
       if (UNSAFE_KEYS.has(key)) continue
-      if (val === undefined) continue // ignore keys w/undef value
+      if (val === undefined) continue
       result[key] = val
     }
-
-    return this._log(plugin, result, obj)
   }
 
   _append_to_array(array, item) {
@@ -121,11 +136,7 @@ class ResultStore {
 
   incr(plugin, obj) {
     const name = this.resolve_plugin_name(plugin)
-    let result = this.store[name]
-    if (!result) {
-      result = default_result()
-      this.store[name] = result
-    }
+    const result = this._get_or_create(name)
 
     const pub = {}
 
@@ -142,11 +153,7 @@ class ResultStore {
 
   push(plugin, obj) {
     const name = this.resolve_plugin_name(plugin)
-    let result = this.store[name]
-    if (!result) {
-      result = default_result()
-      this.store[name] = result
-    }
+    const result = this._get_or_create(name)
 
     this.redis_publish(name, obj)
 
@@ -208,8 +215,8 @@ class ResultStore {
   }
 
   _pre_defined(key, res, hide) {
-    if (key[0] === '_') return false // 'private' keys
-    if (all_opts.includes(key)) return false // these get shown later
+    if (key[0] === '_') return false
+    if (all_opts.includes(key)) return false
     if (hide.length && hide.includes(key)) return false
     if (Array.isArray(res)) return res.length > 0
     if (typeof res === 'object') return false
