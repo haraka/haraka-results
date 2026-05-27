@@ -1,13 +1,13 @@
 {
   "name": "haraka-results",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Haraka results store for connections and transactions",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "files": [
     "CHANGELOG.md",
@@ -20,9 +20,10 @@
     "prettier": "npx prettier . --check",
     "prettier:fix": "npx prettier . --write --log-level=warn",
     "test": "node --test test/result_store.js",
+    "test:coverage": "node --test --experimental-test-coverage",
+    "test:coverage:lcov": "mkdir -p coverage && node --test --experimental-test-coverage --test-reporter=lcov --test-reporter-destination=coverage/lcov.info",
     "versions": "npx npm-dep-mgr check",
-    "versions:fix": "npx npm-dep-mgr update",
-    "test:coverage": "npx c8 --reporter=text --reporter=text-summary node --test test/result_store.js"
+    "versions:fix": "npx npm-dep-mgr update"
   },
   "prettier": {
     "singleQuote": true,
@@ -45,13 +46,13 @@
   },
   "homepage": "https://github.com/haraka/haraka-results#readme",
   "devDependencies": {
-    "@haraka/eslint-config": "^2.0.4",
-    "haraka-test-fixtures": "^1.4.1"
+    "@haraka/eslint-config": "^3.0.0",
+    "haraka-test-fixtures": "^1.6.0"
   },
   "dependencies": {
-    "haraka-config": "^1.5.0"
+    "haraka-config": "^1.6.2"
   },
   "optionalDependencies": {
-    "redis": "^5.11.0"
+    "redis": "^5.12.1"
   }
 }
