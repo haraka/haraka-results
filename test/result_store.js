@@ -3,11 +3,14 @@
 const { describe, it, beforeEach } = require('node:test')
 const assert = require('node:assert/strict')
 
-const fixtures = require('haraka-test-fixtures')
+const {
+  connection: fixtureConnection,
+  makeConnection,
+} = require('haraka-test-fixtures')
 const Results = require('../index')
 
 beforeEach(() => {
-  this.connection = fixtures.connection.createConnection()
+  this.connection = makeConnection()
   this.connection.results = new Results(this.connection)
 })
 
@@ -255,7 +258,7 @@ describe('private_collate', () => {
 
 describe('get', () => {
   beforeEach(() => {
-    this.connection = fixtures.connection.createConnection()
+    this.connection = makeConnection()
     this.connection.results = new Results(this.connection)
     this.connection.results.add('test_plugin', { pass: 'foo' })
   })
@@ -495,7 +498,7 @@ describe('redis_publish error handling', () => {
         },
       },
     }
-    const conn = fixtures.connection.createConnection({}, server)
+    const conn = fixtureConnection.createConnection({}, server)
     const errors = []
     conn.logerror = (_plugin, msg) => errors.push(msg)
     conn.results = new Results(conn)
@@ -517,7 +520,7 @@ describe('redis_publish error handling', () => {
         },
       },
     }
-    const conn = fixtures.connection.createConnection({}, server)
+    const conn = fixtureConnection.createConnection({}, server)
     const errors = []
     conn.logerror = (_plugin, msg) => errors.push(msg)
     conn.results = new Results(conn)
@@ -544,7 +547,7 @@ describe('redis_publish', () => {
     const server = { notes: { redis: redis.createClient() } }
     await server.notes.redis.connect()
 
-    const conn = fixtures.connection.createConnection({}, server)
+    const conn = fixtureConnection.createConnection({}, server)
     conn.results = new Results(conn)
 
     const sub_db = redis.createClient()

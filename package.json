@@ -1,11 +1,8 @@
 {
   "name": "haraka-results",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "Haraka results store for connections and transactions",
   "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
   "engines": {
     "node": ">=20"
   },
@@ -14,6 +11,7 @@
     "config"
   ],
   "scripts": {
+    "prepare": "git rev-parse --git-dir >/dev/null 2>&1 && git config core.hooksPath .githooks || true",
     "format": "npm run prettier:fix && npm run lint:fix",
     "lint": "npx eslint *.js test",
     "lint:fix": "npx eslint *.js test --fix",
@@ -47,12 +45,12 @@
   "homepage": "https://github.com/haraka/haraka-results#readme",
   "devDependencies": {
     "@haraka/eslint-config": "^3.0.0",
-    "haraka-test-fixtures": "^1.6.0"
+    "haraka-test-fixtures": "^1.7.1"
   },
   "dependencies": {
     "haraka-config": "^1.6.2"
   },
   "optionalDependencies": {
-    "redis": "^5.12.1"
+    "redis": "^6.0.0"
   }
 }

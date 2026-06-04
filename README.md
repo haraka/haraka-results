@@ -1,8 +1,6 @@
 # haraka-results
 
-[![Build Status][ci-img]][ci-url]
-[![Code Coverage][cov-img]][cov-url]
-[![Code Climate][clim-img]][clim-url]
+[![Test][ci-img]][ci-url] [![Cover][cov-img]][cov-url] [![Qlty][qlty-img]][qlty-url]
 
 Add, log, retrieve, and share the results of plugin tests.
 
@@ -250,5 +248,5 @@ exports.redis_unsubscribe = function (next, connection) {
 [ci-url]: https://github.com/haraka/haraka-results/actions/workflows/ci.yml
 [cov-img]: https://codecov.io/github/haraka/haraka-results/coverage.svg
 [cov-url]: https://codecov.io/github/haraka/haraka-results
-[clim-img]: https://qlty.sh/gh/haraka/projects/haraka-results/maintainability.svg
-[clim-url]: https://qlty.sh/gh/haraka/projects/haraka-results
+[qlty-img]: https://qlty.sh/gh/haraka/projects/haraka-results/maintainability.svg
+[qlty-url]: https://qlty.sh/gh/haraka/projects/haraka-results
