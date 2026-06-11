@@ -156,6 +156,21 @@ describe('has', () => {
     )
   })
 
+  it('has, boolean scalar, true', () => {
+    this.connection.results.add('test_plugin', { isa: true })
+    assert.equal(this.connection.results.has('test_plugin', 'isa', true), true)
+    assert.equal(
+      this.connection.results.has('test_plugin', 'isa', false),
+      false,
+    )
+  })
+
+  it('has, boolean scalar, false', () => {
+    this.connection.results.add('test_plugin', { isa: false })
+    assert.equal(this.connection.results.has('test_plugin', 'isa', false), true)
+    assert.equal(this.connection.results.has('test_plugin', 'isa', true), false)
+  })
+
   it('returns false for unknown plugin', () => {
     assert.equal(
       this.connection.results.has('no_such_plugin', 'pass', 'x'),
@@ -171,9 +186,18 @@ describe('has', () => {
     )
   })
 
-  it('returns false when stored value is neither string nor array', () => {
+  it('has, number scalar', () => {
     this.connection.results.add('test_plugin', { score: 42 })
-    assert.equal(this.connection.results.has('test_plugin', 'score', 42), false)
+    assert.equal(this.connection.results.has('test_plugin', 'score', 42), true)
+    assert.equal(this.connection.results.has('test_plugin', 'score', 43), false)
+  })
+
+  it('returns false when stored value is an unsupported type', () => {
+    this.connection.results.add('test_plugin', { obj: { a: 1 } })
+    assert.equal(
+      this.connection.results.has('test_plugin', 'obj', '[object Object]'),
+      false,
+    )
   })
 
   it('_has_string returns false for non-string non-regex search', () => {

@@ -24,14 +24,14 @@ class ResultStore {
   has(plugin, list, search) {
     const name = this.resolve_plugin_name(plugin)
     const result = this.store[name]
-    if (!result || !result[list]) return false
+    if (!result) return false
 
-    if (typeof result[list] === 'string') {
-      return this._has_string(result[list], search)
-    }
+    const stored = result[list]
 
-    if (Array.isArray(result[list])) {
-      return this._has_array(result[list], search)
+    if (typeof stored === 'string') return this._has_string(stored, search)
+    if (Array.isArray(stored)) return this._has_array(stored, search)
+    if (typeof stored === 'boolean' || typeof stored === 'number') {
+      return stored === search
     }
 
     return false

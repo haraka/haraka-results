@@ -150,7 +150,7 @@ Keep in mind that plugins also store results in the transaction. Example:
 
 #### has
 
-Check result contents for string or pattern matches.
+Check result contents for string, number, boolean, or pattern matches.
 
 Syntax:
 
@@ -158,8 +158,8 @@ Syntax:
 results.has('plugin_name', 'result_name', 'search_term')
 ```
 
-- result_name: the name of an array or string in the result object
-- search_term: a string or RegExp object
+- result_name: the name of an array, string, number, or boolean in the result object
+- search_term: a string, number, boolean, or RegExp object
 
 ### More Examples
 
