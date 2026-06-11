@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Unreleased
 
+### [2.4.0] - 2026-06-11
+
+- feat: has() matches boolean and number scalars #POLA #DWIM
+
 ### [2.3.2] - 2026-06-03
 
 - dep(redis): bump to v6 (was 5)
@@ -138,3 +142,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 [2.3.0]: https://github.com/haraka/haraka-results/releases/tag/v2.3.0
 [2.3.1]: https://github.com/haraka/haraka-results/releases/tag/v2.3.1
 [2.3.2]: https://github.com/haraka/haraka-results/releases/tag/v2.3.2
+[2.4.0]: https://github.com/haraka/haraka-results/releases/tag/v2.4.0
